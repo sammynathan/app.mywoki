@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Bell } from "lucide-react"
 import { Button } from "../components/ui/button"
 import NotificationsPanel from "../components/notifications-panel"
@@ -12,12 +12,30 @@ export default function Notifications() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [, setLoading] = useState(true)
   const { userId } = useAuth()
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (userId) {
       loadNotifications()
     }
   }, [userId])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setNotificationsOpen(false)
+      }
+    }
+
+    if (notificationsOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [notificationsOpen])
 
   const loadNotifications = async () => {
     if (!userId) return
@@ -112,7 +130,7 @@ export default function Notifications() {
   }
 
   return (
-    <>
+    <div className="relative" ref={dropdownRef}>
       <Button
         variant="ghost"
         size="icon"
@@ -128,13 +146,17 @@ export default function Notifications() {
         )}
       </Button>
 
-      <NotificationsPanel
-        isOpen={notificationsOpen}
-        onClose={() => setNotificationsOpen(false)}
-        notifications={notifications}
-        onMarkAsRead={handleMarkAsRead}
-        onClearAll={handleClearAll}
-      />
-    </>
+      {notificationsOpen && (
+        <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50">
+          <NotificationsPanel
+            isOpen={notificationsOpen}
+            onClose={() => setNotificationsOpen(false)}
+            notifications={notifications}
+            onMarkAsRead={handleMarkAsRead}
+            onClearAll={handleClearAll}
+          />
+        </div>
+      )}
+    </div>
   )
 }

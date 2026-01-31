@@ -23,7 +23,6 @@ interface NotificationsPanelProps {
 }
 
 export default function NotificationsPanel({ 
-  isOpen, 
   onClose, 
   notifications, 
   onMarkAsRead,
@@ -118,21 +117,7 @@ export default function NotificationsPanel({
   }
 
   return (
-    <>
-      {/* Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-x-0 top-16 bottom-0 bg-black/30 z-40"
-          onClick={onClose}
-        />
-      )}
-
-      {/* Panel */}
-      <div
-        className={`fixed right-0 top-16 h-[calc(100vh-4rem)] w-full sm:w-96 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl transform transition-transform duration-300 z-50 flex flex-col ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
+    <div className="flex flex-col h-96 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg rounded-lg overflow-hidden">
         {/* Header */}
         <div className="border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between">
           <h2 className="text-lg font-bold text-gray-900 dark:text-white">Notifications</h2>
@@ -215,7 +200,6 @@ export default function NotificationsPanel({
             </button>
           </div>
         )}
-      </div>
-    </>
+    </div>
   )
 }

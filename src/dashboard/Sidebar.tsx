@@ -128,7 +128,7 @@ export default function Sidebar() {
       <div className="flex items-center h-16 px-6 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gradient-to-br rounded-md flex items-center justify-center">
-            <img src="/mywoki-logo.png" alt="Logo" className="w-5 h-5" />
+            <img src="/mywoki-logo.png" alt="Logo" className="w-10 h-10" />
           </div>
           <div>
             <h1 className="text-lg font-semibold text-gray-900 dark:text-white">mywoki</h1>

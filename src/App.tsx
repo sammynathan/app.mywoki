@@ -6,6 +6,7 @@ import LandingPage from "./components/LandingPage"
 import LoginPage from "./components/LoginPage"
 import Onboarding from "./components/Onboarding"
 import NotFound from "./components/NotFound"
+import SearchServiceDocs from "./components/SearchServiceDocs"
 
 // Dashboard pages
 import DashboardOverview from "./dashboard/DashboardOverview"
@@ -35,6 +36,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/docs/search-service" element={<SearchServiceDocs />} />
 
           {/* Protected dashboard routes */}
           <Route

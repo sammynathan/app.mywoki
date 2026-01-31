@@ -285,7 +285,7 @@ export class SearchService {
         description: doc.description,
         category: doc.category,
         relevance: this.calculateRelevance(searchTerm, doc.title, doc.description),
-        url: `/help/${doc.id}`,
+        url: `/doc/${doc.id}`,
         metadata: {}
       }))
       .filter(result => result.relevance > 0)
