@@ -12,7 +12,11 @@ export class BrevoService {
   private sender = { name: 'mywoki', email: 'noreply@mywoki.com' }
 
   constructor() {
-    this.apiKey = import.meta.env.VITE_BREVO_API_KEY!
+    this.apiKey = import.meta.env.VITE_BREVO_API_KEY
+
+    if (!this.apiKey) {
+      throw new Error('Missing Brevo API key. Please set VITE_BREVO_API_KEY in your .env file.')
+    }
   }
 
   async sendVerificationCode(email: string, code: string): Promise<boolean> {
@@ -89,4 +93,12 @@ export class BrevoService {
   }
 }
 
-export const brevoService = new BrevoService()
+let brevoService: BrevoService | null = null
+
+try {
+  brevoService = new BrevoService()
+} catch (error) {
+  console.warn('Brevo service not initialized:', error)
+}
+
+export { brevoService }

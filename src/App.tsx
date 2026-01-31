@@ -6,7 +6,12 @@ import LandingPage from "./components/LandingPage"
 import LoginPage from "./components/LoginPage"
 import Onboarding from "./components/Onboarding"
 import NotFound from "./components/NotFound"
+import HelpPage from "./components/HelpPage"
+import PrivacyPolicy from "./components/privacy-policy"
+import TermsOfService from "./components/terms-of-service"
+import CookiePolicy from "./components/cookie-policy"
 import SearchServiceDocs from "./components/SearchServiceDocs"
+import DocPage from "./components/DocPage"
 
 // Dashboard pages
 import DashboardOverview from "./dashboard/DashboardOverview"
@@ -36,7 +41,12 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/docs/search-service" element={<SearchServiceDocs />} />
+          <Route path="/help" element={<HelpPage />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/cookies" element={<CookiePolicy />} />
+          <Route path="/doc/search-service" element={<SearchServiceDocs />} />
+          <Route path="/doc/:id" element={<DocPage />} />
 
           {/* Protected dashboard routes */}
           <Route

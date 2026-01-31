@@ -91,6 +91,20 @@ export class VerificationService {
 
       // Send via Brevo
       console.log('🔍 [Service] Sending email via Brevo...')
+      if (!brevoService) {
+        console.error('🔍 [Service] Brevo service not available, cleaning up...')
+        await supabase
+          .from(VERIFICATION_CODES_TABLE)
+          .delete()
+          .eq('email', normalizedEmail)
+          .eq('code', code)
+
+        return {
+          success: false,
+          message: 'Email service unavailable. Please try again later.'
+        }
+      }
+
       const emailSent = await brevoService.sendVerificationCode(email, code)
 
       if (!emailSent) {
@@ -407,8 +421,12 @@ export class VerificationService {
 
       // Send welcome email
       try {
-        await brevoService.sendWelcomeEmail(email, name)
-        console.log('🔍 [Service] Welcome email sent')
+        if (brevoService) {
+          await brevoService.sendWelcomeEmail(email, name)
+          console.log('🔍 [Service] Welcome email sent')
+        } else {
+          console.warn('🔍 [Service] Brevo service not available, skipping welcome email')
+        }
       } catch (emailError) {
         console.error('🔍 [Service] Error sending welcome email:', emailError)
       }

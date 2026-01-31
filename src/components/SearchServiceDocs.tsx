@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Search, Code, Database, Filter, Zap,
-  BookOpen, ChevronRight, ExternalLink,
-  Calendar, CheckCircle, AlertCircle,
+  ChevronRight, ExternalLink,
+  Calendar, AlertCircle,
   FileText, Settings, Users
 } from 'lucide-react'
 import { Card } from './ui/card'
