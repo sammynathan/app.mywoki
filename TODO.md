@@ -1,0 +1,10 @@
+- [x] Fix UUID error when marking sample notifications as read
+  - Modified src/dashboard/Info.tsx to skip database operations for sample notifications (ids starting with 'sample-')
+  - Updated handleMarkAsRead and handleClearAll functions
+- [x] Fix scrolling in DashboardLayout
+  - Removed h-screen, sticky header, and overflow-y-auto to allow normal page scrolling
+  - Updated src/dashboard/DashboardLayout.tsx
+- [x] Fix theme toggle in DashboardLayout and child components
+  - Updated ThemeProvider to accept defaultTheme and storageKey props
+  - Fixed localStorage usage in ThemeProvider
+  - Updated main.tsx to pass props to ThemeProvider

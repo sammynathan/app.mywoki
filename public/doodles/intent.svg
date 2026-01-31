@@ -1,0 +1,39 @@
+<svg
+  width="120"
+  height="120"
+  viewBox="0 0 120 120"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Circle -->
+  <path
+    d="M60 12
+       C86 12 108 34 108 60
+       C108 86 86 108 60 108
+       C34 108 12 86 12 60
+       C12 34 34 12 60 12Z"
+    stroke="#10B981"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-dasharray="6 6"
+  />
+
+  <!-- Arrow -->
+  <path
+    d="M40 60H76"
+    stroke="#10B981"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+  <path
+    d="M68 52L76 60L68 68"
+    stroke="#10B981"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Small dots -->
+  <circle cx="30" cy="40" r="2" fill="#10B981" />
+  <circle cx="88" cy="72" r="2" fill="#10B981" />
+</svg>
