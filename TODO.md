@@ -4,7 +4,7 @@
 - [x] Fix scrolling in DashboardLayout
   - Removed h-screen, sticky header, and overflow-y-auto to allow normal page scrolling
   - Updated src/dashboard/DashboardLayout.tsx
-- [x] Fix theme toggle in DashboardLayout and child components
+ - [x] Fix theme toggle in DashboardLayout and child components
   - Updated ThemeProvider to accept defaultTheme and storageKey props
   - Fixed localStorage usage in ThemeProvider
   - Updated main.tsx to pass props to ThemeProvider
