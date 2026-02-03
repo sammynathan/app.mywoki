@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Card } from '../components/ui/card';
 import { PLAN_LIMITS, type PlanId } from '../lib/plans';
 import { CheckCircle } from 'lucide-react';
 import MyWokiLoader from '../components/MyWokiLoader';
+import { subscribeToolActivationChange } from '../lib/tool-activation-events';
 
 interface Tool {
   id: string;
@@ -23,57 +24,61 @@ export default function ToolsPage() {
   const [userData, setUserData] = useState<UserData>({ plan: 'starter', activeTools: [] });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = localStorage.getItem('user_id');
+  const fetchData = useCallback(async () => {
+    try {
+      const userId = localStorage.getItem('user_id');
 
-        // Fetch all tools
-        const { data: toolsData, error: toolsError } = await supabase
-          .from('tools')
-          .select('id, name, description, category');
-        if (toolsError) throw toolsError;
-        setTools(toolsData || []);
+      // Fetch all tools
+      const { data: toolsData, error: toolsError } = await supabase
+        .from('tools')
+        .select('id, name, description, category');
+      if (toolsError) throw toolsError;
+      setTools(toolsData || []);
 
-        if (userId) {
-          // Fetch user's plan
-          const { data: userPlanData, error: userPlanError } = await supabase
-            .from('users')
-            .select('plan')
-            .eq('id', userId)
-            .single();
-          
-          let plan = 'starter';
-          if (userPlanError) {
-            console.warn('Error fetching user plan, using default:', userPlanError);
-          } else {
-            plan = userPlanData?.plan || 'starter';
-          }
-
-          // Fetch user's active tools
-          const { data: activeToolsData, error: activeToolsError } = await supabase
-            .from('user_tool_activations')
-            .select('tool_id')
-            .eq('user_id', userId)
-            .eq('is_active', true);
-          
-          if (activeToolsError) throw activeToolsError;
-          const activeTools = activeToolsData?.map(t => t.tool_id) || [];
-          
-          setUserData({ plan, activeTools });
+      if (userId) {
+        // Fetch user's plan
+        const { data: userPlanData, error: userPlanError } = await supabase
+          .from('users')
+          .select('plan')
+          .eq('id', userId)
+          .single();
+        
+        let plan = 'starter';
+        if (userPlanError) {
+          console.warn('Error fetching user plan, using default:', userPlanError);
         } else {
-          setUserData({ plan: 'starter', activeTools: [] });
+          plan = userPlanData?.plan || 'starter';
         }
-      } catch (err) {
-        console.error('Failed to load tools page data', err);
-        setUserData({ plan: 'starter', activeTools: [] });
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchData();
+        // Fetch user's active tools
+        const { data: activeToolsData, error: activeToolsError } = await supabase
+          .from('user_tool_activations')
+          .select('tool_id')
+          .eq('user_id', userId)
+          .eq('is_active', true);
+        
+        if (activeToolsError) throw activeToolsError;
+        const activeTools = activeToolsData?.map(t => t.tool_id) || [];
+        
+        setUserData({ plan, activeTools });
+      } else {
+        setUserData({ plan: 'starter', activeTools: [] });
+      }
+    } catch (err) {
+      console.error('Failed to load tools page data', err);
+      setUserData({ plan: 'starter', activeTools: [] });
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchData();
+    const unsubscribe = subscribeToolActivationChange(() => {
+      fetchData();
+    });
+    return () => unsubscribe();
+  }, [fetchData]);
 
   if (loading) {
     return (

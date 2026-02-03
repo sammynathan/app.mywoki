@@ -208,6 +208,7 @@ CREATE TABLE tools (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   description TEXT,
+  long_description TEXT,
   icon_name TEXT NOT NULL DEFAULT 'zap',
   category TEXT NOT NULL,
   is_active BOOLEAN DEFAULT TRUE,
@@ -215,6 +216,17 @@ CREATE TABLE tools (
   requires_mywoki_login BOOLEAN DEFAULT FALSE,
   usage_stats JSONB DEFAULT '{"last_used": "", "activations": 0}'::jsonb,
   issues TEXT[] DEFAULT ARRAY[]::TEXT[],
+  use_cases TEXT[] DEFAULT ARRAY[]::TEXT[],
+  who_its_for TEXT[] DEFAULT ARRAY[]::TEXT[],
+  features TEXT[] DEFAULT ARRAY[]::TEXT[],
+  setup_steps TEXT[] DEFAULT ARRAY[]::TEXT[],
+  faqs JSONB DEFAULT '[]'::jsonb,
+  media_items JSONB DEFAULT '[]'::jsonb,
+  resource_links JSONB DEFAULT '[]'::jsonb,
+  config_fields JSONB DEFAULT '[]'::jsonb,
+  hero_image_url TEXT,
+  tags TEXT[] DEFAULT ARRAY[]::TEXT[],
+  sort_order INTEGER DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
@@ -357,6 +369,17 @@ CREATE TABLE employee_roles (
   UNIQUE(user_id)
 );
 
+-- User tool settings (per-user configuration)
+CREATE TABLE user_tool_settings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+  tool_id UUID REFERENCES tools(id) ON DELETE CASCADE NOT NULL,
+  settings JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
+  UNIQUE(user_id, tool_id)
+);
+
 -- Tool access codes table
 CREATE TABLE tool_access_codes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -382,6 +405,7 @@ CREATE TABLE user_projects (
 -- Enable RLS for additional tables
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE employee_roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_tool_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tool_access_codes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_projects ENABLE ROW LEVEL SECURITY;
 
@@ -391,9 +415,42 @@ CREATE POLICY "notifications_insert" ON notifications FOR INSERT WITH CHECK (aut
 CREATE POLICY "notifications_update" ON notifications FOR UPDATE USING (auth.uid() = user_id);
 CREATE POLICY "notifications_delete" ON notifications FOR DELETE USING (auth.uid() = user_id);
 
-CREATE POLICY "employee_roles_select" ON employee_roles FOR SELECT USING (true);
-CREATE POLICY "employee_roles_insert" ON employee_roles FOR INSERT WITH CHECK (true);
-CREATE POLICY "employee_roles_update" ON employee_roles FOR UPDATE USING (true);
+CREATE POLICY "employee_roles_select" ON employee_roles FOR SELECT
+USING (
+  auth.uid() = user_id
+  OR EXISTS (
+    SELECT 1 FROM employee_roles er
+    WHERE er.user_id = auth.uid() AND er.role = 'admin'
+  )
+);
+CREATE POLICY "employee_roles_insert" ON employee_roles FOR INSERT
+WITH CHECK (
+  auth.uid() = user_id
+  OR EXISTS (
+    SELECT 1 FROM employee_roles er
+    WHERE er.user_id = auth.uid() AND er.role = 'admin'
+  )
+);
+CREATE POLICY "employee_roles_update" ON employee_roles FOR UPDATE
+USING (
+  auth.uid() = user_id
+  OR EXISTS (
+    SELECT 1 FROM employee_roles er
+    WHERE er.user_id = auth.uid() AND er.role = 'admin'
+  )
+);
+CREATE POLICY "employee_roles_delete" ON employee_roles FOR DELETE
+USING (
+  EXISTS (
+    SELECT 1 FROM employee_roles er
+    WHERE er.user_id = auth.uid() AND er.role = 'admin'
+  )
+);
+
+CREATE POLICY "user_tool_settings_select" ON user_tool_settings FOR SELECT USING (true);
+CREATE POLICY "user_tool_settings_insert" ON user_tool_settings FOR INSERT WITH CHECK (true);
+CREATE POLICY "user_tool_settings_update" ON user_tool_settings FOR UPDATE USING (true);
+CREATE POLICY "user_tool_settings_delete" ON user_tool_settings FOR DELETE USING (true);
 
 CREATE POLICY "tool_access_codes_select" ON tool_access_codes FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "tool_access_codes_insert" ON tool_access_codes FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -407,5 +464,7 @@ CREATE POLICY "user_projects_delete" ON user_projects FOR DELETE USING (auth.uid
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_employee_roles_user_id ON employee_roles(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_tool_settings_user_id ON user_tool_settings(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_tool_settings_tool_id ON user_tool_settings(tool_id);
 CREATE INDEX IF NOT EXISTS idx_tool_access_codes_user_id ON tool_access_codes(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_projects_user_id ON user_projects(user_id);

@@ -3,12 +3,56 @@ import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabase"
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
-import { CheckCircle, BarChart3, ArrowLeft, Sparkles, Users, Zap, Activity } from "lucide-react"
+import { CheckCircle, BarChart3, ArrowLeft, Sparkles, Users, Zap, Activity, Link2, PlayCircle } from "lucide-react"
 import { PLAN_LIMITS, type PlanId } from "../lib/plans"
 import UpgradeNudge from "./UpgradeNudge"
 import { useNavigate } from "react-router-dom"
 import { notificationService } from "../lib/notifications"
 import MyWokiLoader from "../components/MyWokiLoader"
+import { emitToolActivationChange } from "../lib/tool-activation-events"
+
+const ALLOWED_EMBED_HOSTS = new Set([
+  "docs.google.com",
+  "notion.so",
+  "notion.site",
+  "www.youtube.com",
+  "youtube.com",
+  "player.vimeo.com",
+  "loom.com",
+  "share.loom.com"
+])
+
+const isAllowedEmbed = (url: string) => {
+  try {
+    const host = new URL(url).host
+    return ALLOWED_EMBED_HOSTS.has(host)
+  } catch {
+    return false
+  }
+}
+
+const toArray = <T,>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : [])
+
+type MediaItem = {
+  type: "video" | "embed" | "image"
+  provider?: string
+  title?: string
+  url: string
+  height?: number
+  width?: number
+  caption?: string
+}
+
+type ResourceLink = {
+  label: string
+  url: string
+  kind?: string
+}
+
+type FaqItem = {
+  question: string
+  answer: string
+}
 
 interface Tool {
   id: string
@@ -18,6 +62,13 @@ interface Tool {
   long_description?: string
   use_cases?: string[]
   who_its_for?: string[]
+  features?: string[]
+  setup_steps?: string[]
+  faqs?: FaqItem[]
+  media_items?: MediaItem[]
+  resource_links?: ResourceLink[]
+  hero_image_url?: string
+  tags?: string[]
   is_active: boolean
 }
 
@@ -221,6 +272,7 @@ export default function ToolDetailsPage() {
 
       setIsActive(true)
       setUserData(prev => ({ ...prev, activeToolCount: prev.activeToolCount + 1 }))
+      emitToolActivationChange({ userId, toolId: tool.id, isActive: true, source: "tool_details_page" })
       
       // Show success message
       alert(`🎉 ${tool.name} activated successfully! Check your notifications for next steps.`)
@@ -280,6 +332,7 @@ export default function ToolDetailsPage() {
 
       setIsActive(false)
       setUserData(prev => ({ ...prev, activeToolCount: Math.max(0, prev.activeToolCount - 1) }))
+      emitToolActivationChange({ userId, toolId: tool.id, isActive: false, source: "tool_details_page" })
       
       alert(`Tool deactivated. You can reactivate it anytime from your tools list.`)
     } catch (err) {
@@ -300,6 +353,12 @@ export default function ToolDetailsPage() {
   const { plan, activeToolCount } = userData
   const limit = (PLAN_LIMITS[plan] || PLAN_LIMITS['starter']).maxActiveTools
   const limitReached = activeToolCount >= limit
+  const mediaItems = toArray<MediaItem>(tool.media_items)
+  const resourceLinks = toArray<ResourceLink>(tool.resource_links)
+  const faqs = toArray<FaqItem>(tool.faqs)
+  const features = tool.features || []
+  const setupSteps = tool.setup_steps || []
+  const tags = tool.tags || []
 
   return (
     <div className="space-y-8 p-4 md:p-6 bg-[color:var(--dashboard-bg)] min-h-screen">
@@ -321,6 +380,18 @@ export default function ToolDetailsPage() {
           <span className="px-3 py-1 text-sm font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 rounded-full">
             {tool.category}
           </span>
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2.5 py-1 text-xs font-medium rounded-full bg-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
           {isActive && (
             <span className="px-3 py-1 text-sm font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 rounded-full">
               Active
@@ -341,6 +412,16 @@ export default function ToolDetailsPage() {
             <p className="text-[color:var(--dashboard-muted)] max-w-3xl mt-2">
               {tool.description}
             </p>
+            {tool.hero_image_url && (
+              <div className="mt-4 overflow-hidden rounded-lg border border-[color:var(--dashboard-border)] bg-[color:var(--dashboard-surface)]">
+                <img
+                  src={tool.hero_image_url}
+                  alt={`${tool.name} preview`}
+                  className="w-full h-auto object-cover"
+                  loading="lazy"
+                />
+              </div>
+            )}
           </div>
           
           {/* Activation Stats */}
@@ -410,6 +491,164 @@ export default function ToolDetailsPage() {
               >
                 {audience}
               </span>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Features */}
+      {features.length > 0 && (
+        <Card className="p-6 space-y-4 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+          <h3 className="font-medium text-[color:var(--dashboard-text)]">
+            Key features
+          </h3>
+          <ul className="space-y-2">
+            {features.map((feature) => (
+              <li key={feature} className="flex items-start gap-3 text-sm text-[color:var(--dashboard-text)]">
+                <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      {/* Setup steps */}
+      {setupSteps.length > 0 && (
+        <Card className="p-6 space-y-4 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+          <h3 className="font-medium text-[color:var(--dashboard-text)]">
+            Setup steps
+          </h3>
+          <ol className="space-y-2 text-sm text-[color:var(--dashboard-text)]">
+            {setupSteps.map((step, index) => (
+              <li key={`${step}-${index}`} className="flex items-start gap-3">
+                <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                  {index + 1}
+                </span>
+                <span>{step}</span>
+              </li>
+            ))}
+          </ol>
+        </Card>
+      )}
+
+      {/* Media and embeds */}
+      {mediaItems.length > 0 && (
+        <Card className="p-6 space-y-4 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+          <h3 className="font-medium text-[color:var(--dashboard-text)]">
+            Media & templates
+          </h3>
+          <div className="space-y-6">
+            {mediaItems.map((item, index) => {
+              const height = item.height && item.height > 0 ? item.height : 420
+              if (item.type === "image") {
+                return (
+                  <figure key={`${item.url}-${index}`} className="space-y-2">
+                    <img
+                      src={item.url}
+                      alt={item.title || "Media"}
+                      className="w-full rounded-lg border border-[color:var(--dashboard-border)]"
+                      loading="lazy"
+                    />
+                    {item.caption && (
+                      <figcaption className="text-xs text-[color:var(--dashboard-muted)]">
+                        {item.caption}
+                      </figcaption>
+                    )}
+                  </figure>
+                )
+              }
+
+              if (item.type === "embed" && isAllowedEmbed(item.url)) {
+                return (
+                  <div key={`${item.url}-${index}`} className="space-y-2">
+                    {item.title && (
+                      <div className="flex items-center gap-2 text-sm text-[color:var(--dashboard-text)]">
+                        <Link2 className="w-4 h-4" />
+                        <span>{item.title}</span>
+                      </div>
+                    )}
+                    <iframe
+                      src={item.url}
+                      title={item.title || "Embed"}
+                      width="100%"
+                      height={height}
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+                      className="rounded-lg border border-[color:var(--dashboard-border)]"
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+
+              if (item.type === "video" && isAllowedEmbed(item.url)) {
+                return (
+                  <div key={`${item.url}-${index}`} className="space-y-2">
+                    {item.title && (
+                      <div className="flex items-center gap-2 text-sm text-[color:var(--dashboard-text)]">
+                        <PlayCircle className="w-4 h-4" />
+                        <span>{item.title}</span>
+                      </div>
+                    )}
+                    <iframe
+                      src={item.url}
+                      title={item.title || "Video"}
+                      width="100%"
+                      height={height}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="rounded-lg border border-[color:var(--dashboard-border)]"
+                      loading="lazy"
+                    />
+                  </div>
+                )
+              }
+
+              return null
+            })}
+          </div>
+        </Card>
+      )}
+
+      {/* Resource links */}
+      {resourceLinks.length > 0 && (
+        <Card className="p-6 space-y-3 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+          <h3 className="font-medium text-[color:var(--dashboard-text)]">
+            Resources
+          </h3>
+          <div className="flex flex-wrap gap-3">
+            {resourceLinks.map((link) => (
+              <a
+                key={`${link.label}-${link.url}`}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm rounded-lg border border-[color:var(--dashboard-border)] bg-[color:var(--dashboard-surface)] hover:bg-[color:var(--dashboard-border)]"
+              >
+                <Link2 className="w-4 h-4" />
+                <span>{link.label}</span>
+              </a>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* FAQs */}
+      {faqs.length > 0 && (
+        <Card className="p-6 space-y-4 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+          <h3 className="font-medium text-[color:var(--dashboard-text)]">
+            FAQs
+          </h3>
+          <div className="space-y-3">
+            {faqs.map((faq, index) => (
+              <div key={`${faq.question}-${index}`} className="rounded-lg border border-[color:var(--dashboard-border)] p-4">
+                <p className="text-sm font-medium text-[color:var(--dashboard-text)]">
+                  {faq.question}
+                </p>
+                <p className="text-sm text-[color:var(--dashboard-muted)] mt-2">
+                  {faq.answer}
+                </p>
+              </div>
             ))}
           </div>
         </Card>

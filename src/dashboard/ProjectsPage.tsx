@@ -24,6 +24,7 @@ export default function ProjectPage() {
       .select(`
         id,
         tools (
+          id,
           name,
           description,
           category
@@ -129,11 +130,27 @@ export default function ProjectPage() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="outline" className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]">
+            <Button
+              variant="outline"
+              className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
+              onClick={() => {
+                if (project.tools?.id) {
+                  navigate(`/dashboard/tools/${project.tools.id}`)
+                }
+              }}
+            >
               <ExternalLink className="w-4 h-4 mr-2" />
               Open tool
             </Button>
-            <Button>Configure</Button>
+            <Button
+              onClick={() => {
+                if (project.tools?.id) {
+                  navigate(`/dashboard/tools/${project.tools.id}/configure`)
+                }
+              }}
+            >
+              Configure
+            </Button>
           </div>
         </div>
       </Card>

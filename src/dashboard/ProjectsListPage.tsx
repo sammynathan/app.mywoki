@@ -1,21 +1,18 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { supabase } from "../lib/supabase"
 import { Card } from "../components/ui/card"
 import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { ArrowRight, FolderKanban, Plus } from "lucide-react"
 import MyWokiLoader from "../components/MyWokiLoader"
+import { subscribeToolActivationChange } from "../lib/tool-activation-events"
 
 export default function ProjectsListPage() {
   const navigate = useNavigate()
   const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadProjects()
-  }, [])
-
-  async function loadProjects() {
+  const loadProjects = useCallback(async () => {
     const userId = localStorage.getItem("user_id")
 
     const { data } = await supabase
@@ -35,7 +32,15 @@ export default function ProjectsListPage() {
 
     setProjects(data || [])
     setLoading(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    loadProjects()
+    const unsubscribe = subscribeToolActivationChange(() => {
+      loadProjects()
+    })
+    return () => unsubscribe()
+  }, [loadProjects])
 
   return (
     <div className="space-y-8">

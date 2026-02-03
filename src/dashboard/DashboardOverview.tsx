@@ -1,21 +1,18 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { supabase } from "../lib/supabase"
 import { Card } from "../components/ui/card"
 import { Button } from "../components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { ArrowRight, Sparkles } from "lucide-react"
 import MyWokiLoader from "../components/MyWokiLoader"
+import { subscribeToolActivationChange } from "../lib/tool-activation-events"
 
 export default function DashboardOverview() {
   const navigate = useNavigate()
   const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    loadProjects()
-  }, [])
-
-  async function loadProjects() {
+  const loadProjects = useCallback(async () => {
     const userId = localStorage.getItem("user_id")
 
     const { data } = await supabase
@@ -34,7 +31,15 @@ export default function DashboardOverview() {
 
     setProjects(data || [])
     setLoading(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    loadProjects()
+    const unsubscribe = subscribeToolActivationChange(() => {
+      loadProjects()
+    })
+    return () => unsubscribe()
+  }, [loadProjects])
 
   return (
     <div className="space-y-8">
@@ -162,7 +167,10 @@ export default function DashboardOverview() {
 
       {/* Quick actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4 bg-[color:var(--dashboard-surface)] hover:bg-[color:var(--dashboard-border)] transition-colors cursor-pointer">
+        <Card
+          className="p-4 bg-[color:var(--dashboard-surface)] hover:bg-[color:var(--dashboard-border)] transition-colors cursor-pointer"
+          onClick={() => navigate("/doc/getting-started")}
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
               <span className="text-blue-600 dark:text-blue-400">📚</span>
@@ -174,7 +182,10 @@ export default function DashboardOverview() {
           </div>
         </Card>
         
-        <Card className="p-4 bg-[color:var(--dashboard-surface)] hover:bg-[color:var(--dashboard-border)] transition-colors cursor-pointer">
+        <Card
+          className="p-4 bg-[color:var(--dashboard-surface)] hover:bg-[color:var(--dashboard-border)] transition-colors cursor-pointer"
+          onClick={() => navigate("/dashboard/settings")}
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
               <span className="text-purple-600 dark:text-purple-400">🎯</span>
@@ -186,14 +197,14 @@ export default function DashboardOverview() {
           </div>
         </Card>
         
-        <Card className="p-4 bg-[color:var(--dashboard-surface)] hover:bg-[color:var(--dashboard-border)] transition-colors cursor-pointer">
+        <Card className="p-4 bg-[color:var(--dashboard-surface)] border border-dashed border-[color:var(--dashboard-border)]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
               <span className="text-amber-600 dark:text-amber-400">⚡</span>
             </div>
             <div>
               <p className="font-medium text-[color:var(--dashboard-text)]">Tips</p>
-              <p className="text-sm text-[color:var(--dashboard-muted)]">Productivity tips</p>
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Coming soon</p>
             </div>
           </div>
         </Card>

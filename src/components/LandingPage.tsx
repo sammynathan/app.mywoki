@@ -265,6 +265,10 @@ export default function LandingPage() {
           mywoki helps individuals and small teams get real value from software --
           without setup, overwhelm, or wasted time.
         </p>
+        <div className="max-w-3xl mx-auto mb-10 rounded-2xl border border-emerald-100 bg-emerald-50/70 px-5 py-4 text-sm text-emerald-900">
+          Building a physical product or a digital product? mywoki helps you find the right tools,
+          where to get your first users, and the exact next steps to validate and launch.
+        </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
@@ -733,6 +737,10 @@ export default function LandingPage() {
               and run the basics with confidence. Every product is a focused, usable kit --
               not a bloated platform -- so you can move from idea to execution in days, not months.
             </p>
+            <p className="text-slate-300 mb-6">
+              We also support both physical and digital product ideas with the right tooling,
+              from where to find early users to which systems to use as you grow.
+            </p>
             <p className="text-slate-300">
               Our goal is simple: give you the right tool at the right time, priced fairly, and
               bundled around outcomes. Start with clarity, then stack tools as your business grows.
@@ -807,6 +815,46 @@ export default function LandingPage() {
       {/* ================= FOOTER ================= */}
       <footer className="border-t py-10">
         <div className="max-w-7xl mx-auto px-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Coming soon</h3>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "AI Automations",
+                  "Teams & permissions",
+                  "Mobile companion",
+                  "Template marketplace",
+                  "Multi-workspace management",
+                  "Investor updates",
+                  "Product roadmap",
+                  "Supplier sourcing",
+                  "Referral engine"
+                ].map((item) => (
+                  <span
+                    key={item}
+                    className="text-xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Why mywoki</h3>
+              <p className="text-sm text-gray-500">
+                A calm path from idea to launch. Clear steps, curated tools, and
+                guidance on where to find your first users.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Stay in the loop</h3>
+              <p className="text-sm text-gray-500">
+                New tools, playbooks, and product updates land in Help and your dashboard.
+              </p>
+            </div>
+          </div>
           <div className="flex justify-between items-center text-sm text-gray-500 mb-6">
             <span>Copyright {new Date().getFullYear()} mywoki</span>
             <div className="flex gap-4">

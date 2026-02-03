@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { activateTool } from '../services/activateTool'
+import { emitToolActivationChange } from '../lib/tool-activation-events'
 
 export function useToolActivation(toolId: string, source: 'tool_details_page' | 'dashboard' | 'recommendation' = 'dashboard') {
   const [loading, setLoading] = useState(false)
@@ -33,6 +34,7 @@ export function useToolActivation(toolId: string, source: 'tool_details_page' | 
         source
       })
 
+      emitToolActivationChange({ userId, toolId, isActive: true, source })
       setLoading(false)
       return { success: true, activation: result.activation }
     } catch (error) {
@@ -61,6 +63,7 @@ export function useToolActivation(toolId: string, source: 'tool_details_page' | 
       return false
     }
 
+    emitToolActivationChange({ userId, toolId, isActive: false, source })
     return true
   }
 

@@ -21,6 +21,7 @@ interface User {
   name: string
   plan: string
   status: 'active' | 'inactive' | 'suspended'
+  role: 'user' | 'employee' | 'admin'
   created_at: string
   last_login: string
   active_tools_count: number
@@ -33,6 +34,7 @@ export default function UsersManagement() {
   const [searchQuery, setSearchQuery] = useState("")
   const [filter, setFilter] = useState<string>("all")
   const [, setSelectedUser] = useState<User | null>(null)
+  const [roleUpdating, setRoleUpdating] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     loadUsers()
@@ -51,6 +53,18 @@ export default function UsersManagement() {
         .order('created_at', { ascending: false })
 
       if (error) throw error
+      const userIds = (usersData || []).map((user) => user.id)
+
+      const { data: rolesData } = userIds.length
+        ? await supabase
+            .from('employee_roles')
+            .select('user_id, role')
+            .in('user_id', userIds)
+        : { data: [] }
+
+      const roleMap = new Map<string, User['role']>(
+        (rolesData || []).map((row: { user_id: string; role: User['role'] }) => [row.user_id, row.role])
+      )
 
       // Get active tool counts for each user
       const usersWithCounts = await Promise.all(
@@ -63,7 +77,8 @@ export default function UsersManagement() {
 
           return {
             ...user,
-            active_tools_count: count || 0
+            active_tools_count: count || 0,
+            role: roleMap.get(user.id) || 'user'
           }
         })
       )
@@ -113,6 +128,25 @@ export default function UsersManagement() {
     }
   }
 
+  const updateUserRole = async (userId: string, role: User['role']) => {
+    setRoleUpdating((prev) => ({ ...prev, [userId]: true }))
+    try {
+      const { error } = await supabase
+        .from('employee_roles')
+        .upsert({ user_id: userId, role }, { onConflict: 'user_id' })
+
+      if (error) throw error
+
+      setUsers(users.map(user =>
+        user.id === userId ? { ...user, role } : user
+      ))
+    } catch (error) {
+      console.error('Error updating user role:', error)
+    } finally {
+      setRoleUpdating((prev) => ({ ...prev, [userId]: false }))
+    }
+  }
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
@@ -128,6 +162,14 @@ export default function UsersManagement() {
       case 'core': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
       case 'starter': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400'
       default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  const getRoleColor = (role: User['role']) => {
+    switch (role) {
+      case 'admin': return 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300'
+      case 'employee': return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300'
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
     }
   }
 
@@ -227,6 +269,9 @@ export default function UsersManagement() {
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Active Tools
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -240,7 +285,7 @@ export default function UsersManagement() {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                     <div className="flex flex-col items-center gap-3">
                       <MyWokiLoader />
                       <span className="text-sm">Loading users...</span>
@@ -249,7 +294,7 @@ export default function UsersManagement() {
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                     No users found
                   </td>
                 </tr>
@@ -281,6 +326,23 @@ export default function UsersManagement() {
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${getStatusColor(user.status)}`}>
                         {user.status}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <select
+                          value={user.role}
+                          onChange={(e) => updateUserRole(user.id, e.target.value as User['role'])}
+                          disabled={roleUpdating[user.id]}
+                          className="px-2 py-1 text-xs rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                        >
+                          <option value="user">User</option>
+                          <option value="employee">Employee</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${getRoleColor(user.role)}`}>
+                          {user.role}
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-white">

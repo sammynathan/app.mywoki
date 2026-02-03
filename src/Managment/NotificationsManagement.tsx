@@ -100,20 +100,43 @@ export default function NotificationsManagement() {
     setSending(true)
 
     try {
-      // Determine target users
-      let targetUsers: User[] = []
-      
-      if (newNotification.target === 'all') {
-        targetUsers = users
-      } else if (newNotification.target === 'specific_plan' && newNotification.plan_filter) {
-        targetUsers = users.filter(user => user.plan === newNotification.plan_filter)
-      } else if (newNotification.target === 'specific_users' && selectedUserIds.length > 0) {
-        targetUsers = users.filter(user => selectedUserIds.includes(user.id))
+      let targetUserIds: string[] = []
+
+      if (newNotification.target === 'specific_users' && selectedUserIds.length === 0) {
+        alert('Please select at least one user.')
+        return
+      }
+
+      let query = supabase
+        .from('users')
+        .select('id')
+        .eq('status', 'active')
+
+      if (newNotification.target === 'specific_plan') {
+        if (!newNotification.plan_filter) {
+          alert('Please select a plan.')
+          return
+        }
+        query = query.eq('plan', newNotification.plan_filter)
+      }
+
+      if (newNotification.target === 'specific_users') {
+        query = query.in('id', selectedUserIds)
+      }
+
+      const { data: userRows, error: userRowsError } = await query
+      if (userRowsError) throw userRowsError
+
+      targetUserIds = (userRows || []).map((user) => user.id)
+
+      if (targetUserIds.length === 0) {
+        alert('No valid users found for this notification target.')
+        return
       }
 
       // Send notifications to each user
-      const notifications = targetUsers.map(user => ({
-        user_id: user.id,
+      const notifications = targetUserIds.map(userId => ({
+        user_id: userId,
         type: newNotification.type,
         title: newNotification.title,
         message: newNotification.message,
@@ -136,7 +159,7 @@ export default function NotificationsManagement() {
         .from('notification_templates')
         .insert([{
           ...newNotification,
-          sent_count: targetUsers.length
+          sent_count: targetUserIds.length
         }])
 
       // Reset form
@@ -153,7 +176,7 @@ export default function NotificationsManagement() {
       // Reload data
       loadData()
 
-      alert(`Notification sent to ${targetUsers.length} users successfully!`)
+      alert(`Notification sent to ${targetUserIds.length} users successfully!`)
     } catch (error) {
       console.error('Error sending notification:', error)
       alert('Failed to send notification')

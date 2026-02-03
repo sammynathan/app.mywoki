@@ -12,11 +12,13 @@ import TermsOfService from "./components/terms-of-service"
 import CookiePolicy from "./components/cookie-policy"
 import SearchServiceDocs from "./components/SearchServiceDocs"
 import DocPage from "./components/DocPage"
+import ManagementRoute from "./components/ManagementRoute"
 
 // Dashboard pages
 import DashboardOverview from "./dashboard/DashboardOverview"
 import ToolsPage from "./dashboard/ToolsPage"
 import ToolDetailsPage from "./dashboard/ToolDetailsPage"
+import ToolConfigurePage from "./dashboard/ToolConfigurePage"
 import UsageAnalyticsPage from "./dashboard/UsageAnalyticsPage"
 import BillingPage from "./dashboard/BillingPage"
 import AccountSettingsPage from "./dashboard/AccountSettingsPage"
@@ -62,6 +64,7 @@ function App() {
             <Route path="projects/:id" element={<ProjectPage />} />
             <Route path="tools" element={<ToolsPage />} />
             <Route path="tools/:id" element={<ToolDetailsPage />} />
+            <Route path="tools/:id/configure" element={<ToolConfigurePage />} />
             <Route path="analytics" element={<UsageAnalyticsPage />} />
             <Route path="billing" element={<BillingPage />} />
             <Route path="settings" element={<AccountSettingsPage />} />
@@ -69,7 +72,14 @@ function App() {
             {/* Redirect any unmatched dashboard paths to overview */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Route>
-       <Route path="/management" element={<ManagementLayout />}>
+       <Route
+        path="/management"
+        element={
+          <ManagementRoute>
+            <ManagementLayout />
+          </ManagementRoute>
+        }
+      >
         <Route index element={<ManagementOverview />} />
         <Route path="users" element={<UsersManagement />} />
         <Route path="tools" element={<ToolsManagement />} />

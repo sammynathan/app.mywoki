@@ -14,10 +14,22 @@ export interface Database {
           id: string
           name: string
           description: string
+          long_description: string | null
           category: string
           icon_name: string | null
           is_active: boolean
           requires_mywoki_login: boolean
+          use_cases: string[] | null
+          who_its_for: string[] | null
+          features: string[] | null
+          setup_steps: string[] | null
+          faqs: Json | null
+          media_items: Json | null
+          resource_links: Json | null
+          config_fields: Json | null
+          hero_image_url: string | null
+          tags: string[] | null
+          sort_order: number | null
           created_at: string
           updated_at: string
         }
@@ -25,10 +37,22 @@ export interface Database {
           id?: string
           name: string
           description: string
+          long_description?: string | null
           category: string
           icon_name?: string | null
           is_active?: boolean
           requires_mywoki_login?: boolean
+          use_cases?: string[] | null
+          who_its_for?: string[] | null
+          features?: string[] | null
+          setup_steps?: string[] | null
+          faqs?: Json | null
+          media_items?: Json | null
+          resource_links?: Json | null
+          config_fields?: Json | null
+          hero_image_url?: string | null
+          tags?: string[] | null
+          sort_order?: number | null
           created_at?: string
           updated_at?: string
         }
@@ -36,10 +60,48 @@ export interface Database {
           id?: string
           name?: string
           description?: string
+          long_description?: string | null
           category?: string
           icon_name?: string | null
           is_active?: boolean
           requires_mywoki_login?: boolean
+          use_cases?: string[] | null
+          who_its_for?: string[] | null
+          features?: string[] | null
+          setup_steps?: string[] | null
+          faqs?: Json | null
+          media_items?: Json | null
+          resource_links?: Json | null
+          config_fields?: Json | null
+          hero_image_url?: string | null
+          tags?: string[] | null
+          sort_order?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      user_tool_settings: {
+        Row: {
+          id: string
+          user_id: string
+          tool_id: string
+          settings: Json | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          tool_id: string
+          settings?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          tool_id?: string
+          settings?: Json | null
           created_at?: string
           updated_at?: string
         }
