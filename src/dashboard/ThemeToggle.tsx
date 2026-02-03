@@ -28,9 +28,9 @@ export default function ThemeToggle() {
       case 'light':
         return <Sun className="h-5 w-5 text-amber-500 transition-transform hover:scale-110" />
       case 'dark':
-        return <Moon className="h-5 w-5 text-gray-700 dark:text-gray-300 transition-transform hover:scale-110" />
+        return <Moon className="h-5 w-5 text-[color:var(--dashboard-text)] transition-transform hover:scale-110" />
       case 'system':
-        return <Monitor className="h-5 w-5 text-gray-500 transition-transform hover:scale-110" />
+        return <Monitor className="h-5 w-5 text-[color:var(--dashboard-muted)] transition-transform hover:scale-110" />
       default:
         return <Sun className="h-5 w-5 text-amber-500 transition-transform hover:scale-110" />
     }
@@ -54,7 +54,7 @@ export default function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+      className="rounded-full hover:bg-[color:var(--dashboard-border)] transition-all duration-200"
       aria-label={getLabel()}
       title={getLabel()}
     >

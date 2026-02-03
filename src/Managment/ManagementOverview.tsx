@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { Card } from "../components/ui/card"
 import { Button } from "../components/ui/button"
 import { supabase } from "../lib/supabase"
+import MyWokiLoader from "../components/MyWokiLoader"
 import {
   Users,
   Wrench,
@@ -90,8 +91,9 @@ export default function ManagementOverview() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-gray-500 dark:text-gray-400">Loading dashboard...</div>
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-3">
+        <MyWokiLoader />
+        <div className="text-gray-500 dark:text-gray-400 text-sm">Loading dashboard...</div>
       </div>
     )
   }

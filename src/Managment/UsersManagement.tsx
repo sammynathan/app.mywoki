@@ -4,6 +4,7 @@ import { Card } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Button } from "../components/ui/button"
 import { supabase } from "../lib/supabase"
+import MyWokiLoader from "../components/MyWokiLoader"
 import { 
   Search, 
   Filter, 
@@ -240,7 +241,10 @@ export default function UsersManagement() {
               {loading ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                    Loading users...
+                    <div className="flex flex-col items-center gap-3">
+                      <MyWokiLoader />
+                      <span className="text-sm">Loading users...</span>
+                    </div>
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (

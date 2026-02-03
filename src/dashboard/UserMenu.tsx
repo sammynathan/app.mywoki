@@ -39,27 +39,27 @@ export default function UserMenu({ userName }: UserMenuProps) {
     <div className="relative" ref={menuRef}>
       <Button
         variant="ghost"
-        className="flex items-center space-x-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+        className="flex items-center space-x-2 rounded-full hover:bg-[color:var(--dashboard-border)]"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center text-white font-medium">
           {userInitial}
         </div>
-        <span className="hidden md:inline text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span className="hidden md:inline text-sm font-medium text-[color:var(--dashboard-text)]">
           {userName || "User"}
         </span>
-        <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`h-4 w-4 text-[color:var(--dashboard-muted)] transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </Button>
 
       {isOpen && (
-        <Card className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 border dark:border-gray-800 shadow-lg rounded-lg z-50">
+        <Card className="absolute right-0 mt-2 w-56 shadow-lg rounded-lg z-50">
           {/* User info */}
-          <div className="px-4 py-3 border-b dark:border-gray-800">
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
+          <div className="px-4 py-3 border-b border-[color:var(--dashboard-border)]">
+            <p className="text-sm font-medium text-[color:var(--dashboard-text)]">
               {userName || "User"}
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-              Free Plan • Upgrade available
+            <p className="text-xs text-[color:var(--dashboard-muted)] truncate">
+              Free Plan - Upgrade available
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export default function UserMenu({ userName }: UserMenuProps) {
                 navigate('/dashboard/settings')
                 setIsOpen(false)
               }}
-              className="w-full px-4 py-2 text-left flex items-center text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="w-full px-4 py-2 text-left flex items-center text-sm text-[color:var(--dashboard-text)] hover:bg-[color:var(--dashboard-border)]"
             >
               <User className="h-4 w-4 mr-3" />
               Your Profile
@@ -81,7 +81,7 @@ export default function UserMenu({ userName }: UserMenuProps) {
                 navigate('/dashboard/settings')
                 setIsOpen(false)
               }}
-              className="w-full px-4 py-2 text-left flex items-center text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="w-full px-4 py-2 text-left flex items-center text-sm text-[color:var(--dashboard-text)] hover:bg-[color:var(--dashboard-border)]"
             >
               <Settings className="h-4 w-4 mr-3" />
               Settings
@@ -89,7 +89,7 @@ export default function UserMenu({ userName }: UserMenuProps) {
           </div>
 
           {/* Logout */}
-          <div className="border-t dark:border-gray-800 py-1">
+          <div className="border-t border-[color:var(--dashboard-border)] py-1">
             <button
               onClick={handleLogout}
               className="w-full px-4 py-2 text-left flex items-center text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"

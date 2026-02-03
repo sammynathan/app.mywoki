@@ -123,16 +123,16 @@ export default function Sidebar() {
   const planColors = getPlanColor(userPlan)
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800">
+    <div className="flex flex-col h-full bg-[color:var(--dashboard-surface)] border-r border-[color:var(--dashboard-border)]">
       {/* Logo/Brand */}
-      <div className="flex items-center h-16 px-6 border-b border-gray-200 dark:border-gray-800">
+      <div className="flex items-center h-16 px-6 border-b border-[color:var(--dashboard-border)]">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gradient-to-br rounded-md flex items-center justify-center">
             <img src="/mywoki-logo.png" alt="Logo" className="w-10 h-10" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">mywoki</h1>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Workspace</p>
+            <h1 className="text-lg font-semibold text-[color:var(--dashboard-text)]">mywoki</h1>
+            <p className="text-xs text-[color:var(--dashboard-muted)]">Workspace</p>
           </div>
         </div>
       </div>
@@ -149,7 +149,7 @@ export default function Sidebar() {
                 "group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors",
                 isActive
                   ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  : "text-[color:var(--dashboard-muted)] hover:bg-[color:var(--dashboard-border)]"
               )
             }
           >
@@ -183,11 +183,11 @@ export default function Sidebar() {
           
           {loading ? (
             <div className="animate-pulse">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-20 mb-2"></div>
+              <div className="h-4 bg-[color:var(--dashboard-border)] rounded w-20 mb-2"></div>
             </div>
           ) : (
             <>
-              <p className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+              <p className="text-sm font-semibold text-[color:var(--dashboard-text)] mb-2">
                 {formatPlanName(userPlan)}
               </p>
               
@@ -199,7 +199,7 @@ export default function Sidebar() {
                 >
                   Upgrade
                   <span className="transform group-hover:translate-x-1 transition-transform">
-                    →
+                    -&gt;
                   </span>
                 </button>
               ) : userPlan.toLowerCase() === 'core' ? (
@@ -209,11 +209,11 @@ export default function Sidebar() {
                 >
                   Upgrade to Growth
                   <span className="transform group-hover:translate-x-1 transition-transform">
-                    →
+                    -&gt;
                   </span>
                 </button>
               ) : (
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-[color:var(--dashboard-muted)]">
                   Maximum plan
                 </p>
               )}
@@ -223,7 +223,7 @@ export default function Sidebar() {
       </div>
 
       {/* Footer navigation */}
-      <div className="border-t border-gray-200 dark:border-gray-800 px-4 py-4 space-y-1">
+      <div className="border-t border-[color:var(--dashboard-border)] px-4 py-4 space-y-1">
         {footerItems.map((item) => (
           <NavLink
             key={item.path}
@@ -232,8 +232,8 @@ export default function Sidebar() {
               cn(
                 "flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors",
                 isActive
-                  ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  ? "bg-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
+                  : "text-[color:var(--dashboard-muted)] hover:bg-[color:var(--dashboard-border)]"
               )
             }
           >
@@ -245,7 +245,7 @@ export default function Sidebar() {
         {/* Quick link to home */}
         <a
           href="/"
-          className="flex items-center px-3 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+          className="flex items-center px-3 py-2.5 text-sm font-medium text-[color:var(--dashboard-muted)] hover:bg-[color:var(--dashboard-border)] rounded-lg"
         >
           <Home className="mr-3 h-5 w-5" />
           Back to Home
@@ -254,3 +254,4 @@ export default function Sidebar() {
     </div>
   )
 }
+

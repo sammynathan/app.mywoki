@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --dashboard-bg: #f5f7fb;
+  --dashboard-surface: #fbfdff;
+  --dashboard-border: #e6eaf1;
+  --dashboard-text: #1f2937;
+  --dashboard-muted: #5b6778;
+  --dashboard-accent: #10b981;
+}
+
+.dark {
+  --dashboard-bg: #0b1220;
+  --dashboard-surface: #0f172a;
+  --dashboard-border: #1f2937;
+  --dashboard-text: #e2e8f0;
+  --dashboard-muted: #94a3b8;
+  --dashboard-accent: #34d399;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

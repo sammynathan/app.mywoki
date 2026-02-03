@@ -22,13 +22,13 @@ export function ThemeProvider({
   storageKey = 'theme'
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
-    // Check localStorage first
-    const savedTheme = localStorage.getItem(storageKey) as Theme
+    if (typeof window === 'undefined') {
+      return defaultTheme
+    }
+    const savedTheme = window.localStorage.getItem(storageKey) as Theme
     if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
       return savedTheme
     }
-
-    // Fallback to defaultTheme
     return defaultTheme
   })
 
@@ -39,15 +39,20 @@ export function ThemeProvider({
 
     // Update the data-theme attribute
     root.setAttribute('data-theme', activeTheme)
+    root.style.colorScheme = activeTheme
 
     // Update localStorage
-    localStorage.setItem(storageKey, theme)
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(storageKey, theme)
+    }
 
-    // Add/remove dark class for Tailwind CSS
+    // Add/remove dark class for Tailwind CSS ** the main bug fix  for the theme change**
     if (activeTheme === 'dark') {
       root.classList.add('dark')
+      document.body.classList.add('dark')
     } else {
       root.classList.remove('dark')
+      document.body.classList.remove('dark')
     }
   }, [theme, storageKey])
 
@@ -68,8 +73,12 @@ export function ThemeProvider({
       }
     }
 
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange)
+      return () => mediaQuery.removeEventListener('change', handleChange)
+    }
+    mediaQuery.addListener(handleChange)
+    return () => mediaQuery.removeListener(handleChange)
   }, [theme])
 
   return (

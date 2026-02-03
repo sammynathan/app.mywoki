@@ -48,12 +48,12 @@ export default function ProjectNotesPanel({ activationId }: Props) {
   }
 
   return (
-    <Card className="p-6 space-y-4 bg-white dark:bg-gray-900">
+    <Card className="p-6 space-y-4 bg-[color:var(--dashboard-surface)]">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-900 dark:text-white">
+        <h3 className="text-sm font-medium text-[color:var(--dashboard-text)]">
           Project notes
         </h3>
-        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div className="flex items-center gap-2 text-xs text-[color:var(--dashboard-muted)]">
           {saving ? (
             <>
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
@@ -76,10 +76,10 @@ export default function ProjectNotesPanel({ activationId }: Props) {
           saveNote(newValue)
         }}
         placeholder="Write your thoughts, next steps, ideas, or todo list here..."
-        className="min-h-[200px] text-sm bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+        className="min-h-[200px] text-sm bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)] placeholder-[color:var(--dashboard-muted)] focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
       />
 
-      <div className="text-xs text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-800">
+      <div className="text-xs text-[color:var(--dashboard-muted)] pt-2 border-t border-[color:var(--dashboard-border)]">
         <p>💡 Notes are saved automatically as you type.</p>
         <p className="mt-1">Use this space for project planning, meeting notes, or tracking progress.</p>
       </div>

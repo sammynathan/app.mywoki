@@ -253,8 +253,8 @@ export default function ToolsManagement() {
 
       {/* Tools Grid */}
       {loading ? (
-        <div className="text-center py-8">
-          <p className="text-gray-500 dark:text-gray-400">Loading tools...</p>
+        <div className="text-center py-8 flex flex-col items-center gap-3">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">Loading tools...</p>
         </div>
       ) : filteredTools.length === 0 ? (
         <div className="text-center py-8">

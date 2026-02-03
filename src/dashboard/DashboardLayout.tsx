@@ -13,9 +13,9 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex h-screen bg-[color:var(--dashboard-bg)] text-[color:var(--dashboard-text)]">
       {/* Sidebar - Hidden on mobile, shown on desktop or when mobile menu is open */}
-      <aside className={`w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 lg:block ${showMobileMenu ? 'block' : 'hidden'}`}>
+      <aside className={`w-64 bg-[color:var(--dashboard-surface)] border-r border-[color:var(--dashboard-border)] lg:block ${showMobileMenu ? 'block' : 'hidden'}`}>
         <Sidebar />
       </aside>
 
@@ -30,7 +30,7 @@ export default function DashboardLayout() {
       {/* Main column */}
       <div className="flex-1 flex flex-col min-h-0">
         {/* Header - Fixed */}
-        <header className="shrink-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+        <header className="shrink-0 bg-[color:var(--dashboard-surface)] border-b border-[color:var(--dashboard-border)]">
           <DashboardHeader
             onMenuClick={handleMenuClick}
             showMobileMenu={showMobileMenu}

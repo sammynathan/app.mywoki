@@ -111,8 +111,8 @@ export default function DashboardHeader({
 
   return (
     <>
-      <header className={`sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-all duration-300 ${
-        isScrolled ? 'shadow-lg dark:shadow-gray-900/30' : 'shadow-sm'
+      <header className={`sticky top-0 z-40 bg-[color:var(--dashboard-surface)]/90 backdrop-blur-md border-b border-[color:var(--dashboard-border)] transition-all duration-300 ${
+        isScrolled ? 'shadow-lg' : 'shadow-sm'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -122,7 +122,7 @@ export default function DashboardHeader({
               {/* Mobile menu button */}
               <button
                 onClick={onMenuClick}
-                className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+                className="lg:hidden p-2 rounded-md text-[color:var(--dashboard-muted)] hover:text-[color:var(--dashboard-text)] hover:bg-[color:var(--dashboard-border)] transition-colors"
                 aria-label="Toggle menu"
               >
                 {showMobileMenu ? (
@@ -135,7 +135,7 @@ export default function DashboardHeader({
               {/* Brand/Logo */}
               <div className="flex items-center ml-4">
                 
-                <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                <span className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                   workspace
                 </span>
               </div>
@@ -146,13 +146,13 @@ export default function DashboardHeader({
               <form onSubmit={handleSearchSubmit}>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                    <Search className="h-5 w-5 text-[color:var(--dashboard-muted)]" />
                   </div>
                   <input
                     ref={searchInputRef}
                     type="search"
                     placeholder="Search tools, projects, or documentation..."
-                    className="block w-full pl-10 pr-24 py-2.5 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-600 focus:border-transparent transition-all duration-200"
+                    className="block w-full pl-10 pr-24 py-2.5 border border-[color:var(--dashboard-border)] rounded-xl bg-[color:var(--dashboard-surface)] text-[color:var(--dashboard-text)] placeholder-[color:var(--dashboard-muted)] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                     value={query}
                     onChange={handleSearchChange}
                     onFocus={() => {
@@ -168,7 +168,7 @@ export default function DashboardHeader({
                       <button
                         type="button"
                         onClick={handleClearSearch}
-                        className="p-1 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                        className="p-1 rounded-md text-[color:var(--dashboard-muted)] hover:text-[color:var(--dashboard-text)] transition-colors"
                         aria-label="Clear search"
                       >
                         <X className="h-4 w-4" />
@@ -181,7 +181,7 @@ export default function DashboardHeader({
                     )}
                     
                     {/* Keyboard shortcut hint */}
-                    <div className="hidden sm:flex items-center gap-1 px-2 py-1 text-xs text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-md">
+                    <div className="hidden sm:flex items-center gap-1 px-2 py-1 text-xs text-[color:var(--dashboard-muted)] border border-[color:var(--dashboard-border)] rounded-md">
                       <Command className="h-3 w-3" />
                       <span>K</span>
                     </div>
@@ -189,9 +189,9 @@ export default function DashboardHeader({
 
                   {/* Suggestions dropdown */}
                   {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50 overflow-hidden">
-                      <div className="p-2 border-b border-gray-200 dark:border-gray-800">
-                        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)] rounded-lg shadow-lg z-50 overflow-hidden">
+                      <div className="p-2 border-b border-[color:var(--dashboard-border)]">
+                        <div className="flex items-center gap-2 text-xs text-[color:var(--dashboard-muted)]">
                           <Search className="w-3 h-3" />
                           <span>Suggestions</span>
                         </div>
@@ -201,11 +201,11 @@ export default function DashboardHeader({
                           <button
                             key={index}
                             onClick={() => handleSuggestionClick(suggestion)}
-                            className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                            className="w-full text-left px-3 py-2 hover:bg-[color:var(--dashboard-border)] transition-colors"
                           >
                             <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-gray-400" />
-                              <span className="text-sm text-gray-700 dark:text-gray-300">
+                              <Clock className="w-4 h-4 text-[color:var(--dashboard-muted)]" />
+                              <span className="text-sm text-[color:var(--dashboard-text)]">
                                 {suggestion}
                               </span>
                             </div>
@@ -233,7 +233,7 @@ export default function DashboardHeader({
 
               {/* Mobile search button (hidden on desktop) */}
               <button
-                className="sm:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-800"
+                className="sm:hidden p-2 rounded-md text-[color:var(--dashboard-muted)] hover:text-[color:var(--dashboard-text)] hover:bg-[color:var(--dashboard-border)]"
                 aria-label="Search"
                 onClick={toggleSearch}
               >
@@ -257,3 +257,4 @@ export default function DashboardHeader({
     </>
   )
 }
+

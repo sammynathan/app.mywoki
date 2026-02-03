@@ -3,7 +3,7 @@ import { Bell } from "lucide-react"
 import { Button } from "../components/ui/button"
 import NotificationsPanel from "../components/notifications-panel"
 import type { Notification } from "../components/notifications-panel"
-import { notificationService } from "../lib/notifications"
+import { notificationService, subscribeToNotifications } from "../lib/notifications"
 import { useAuth } from "../auth/AuthContext"
 
 export default function Notifications() {
@@ -17,6 +17,44 @@ export default function Notifications() {
   useEffect(() => {
     if (userId) {
       loadNotifications()
+    }
+  }, [userId])
+
+  useEffect(() => {
+    if (userId && notificationsOpen) {
+      loadNotifications()
+    }
+  }, [notificationsOpen, userId])
+
+  useEffect(() => {
+    if (!userId) return
+
+    const unsubscribe = subscribeToNotifications(userId, (newNotification) => {
+      setNotifications(prev => {
+        const filtered = prev.filter(n => !n.id.startsWith('sample-'))
+        if (filtered.some(n => n.id === newNotification.id)) {
+          return filtered
+        }
+
+        const transformed: Notification = {
+          id: newNotification.id,
+          type: newNotification.type as Notification['type'],
+          title: newNotification.title,
+          message: newNotification.message,
+          data: newNotification.data,
+          read: newNotification.read,
+          created_at: newNotification.created_at,
+          intent: newNotification.intent as Notification['intent']
+        }
+
+        const next = [transformed, ...filtered].slice(0, 10)
+        setUnreadCount(next.filter(n => !n.read).length)
+        return next
+      })
+    })
+
+    return () => {
+      unsubscribe()
     }
   }, [userId])
 
@@ -135,10 +173,10 @@ export default function Notifications() {
         variant="ghost"
         size="icon"
         onClick={() => setNotificationsOpen(!notificationsOpen)}
-        className="relative rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        className="relative rounded-full hover:bg-[color:var(--dashboard-border)] transition-colors"
         aria-label="Notifications"
       >
-        <Bell className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+        <Bell className="h-5 w-5 text-[color:var(--dashboard-text)]" />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -147,7 +185,7 @@ export default function Notifications() {
       </Button>
 
       {notificationsOpen && (
-        <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 top-full mt-2 w-96 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)] rounded-lg shadow-lg z-50">
           <NotificationsPanel
             isOpen={notificationsOpen}
             onClose={() => setNotificationsOpen(false)}
@@ -160,3 +198,4 @@ export default function Notifications() {
     </div>
   )
 }
+

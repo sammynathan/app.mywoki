@@ -8,6 +8,7 @@ import { PLAN_LIMITS, type PlanId } from "../lib/plans"
 import UpgradeNudge from "./UpgradeNudge"
 import { useNavigate } from "react-router-dom"
 import { notificationService } from "../lib/notifications"
+import MyWokiLoader from "../components/MyWokiLoader"
 
 interface Tool {
   id: string
@@ -289,8 +290,9 @@ export default function ToolDetailsPage() {
 
   if (loading || !tool) {
     return (
-      <div className="flex items-center justify-center min-h-[400px] bg-gray-50 dark:bg-gray-900">
-        <div className="text-gray-500 dark:text-gray-400">Loading tool details...</div>
+      <div className="flex flex-col items-center justify-center min-h-[400px] bg-[color:var(--dashboard-bg)] gap-3">
+        <MyWokiLoader />
+        <div className="text-[color:var(--dashboard-muted)] text-sm">Loading tool details...</div>
       </div>
     )
   }
@@ -300,15 +302,15 @@ export default function ToolDetailsPage() {
   const limitReached = activeToolCount >= limit
 
   return (
-    <div className="space-y-8 p-4 md:p-6 bg-gray-50 dark:bg-gray-950 min-h-screen">
+    <div className="space-y-8 p-4 md:p-6 bg-[color:var(--dashboard-bg)] min-h-screen">
       {/* Back button */}
       <Button
         onClick={() => navigate("/dashboard/tools")}
         variant="ghost"
-        className="-ml-2 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800"
+        className="-ml-2 bg-[color:var(--dashboard-surface)] hover:bg-[color:var(--dashboard-border)] border border-[color:var(--dashboard-border)]"
       >
-        <ArrowLeft className="w-4 h-4 mr-2 text-gray-600 dark:text-gray-400" />
-        <span className="text-gray-700 dark:text-gray-300">Back to tools</span>
+        <ArrowLeft className="w-4 h-4 mr-2 text-[color:var(--dashboard-muted)]" />
+        <span className="text-[color:var(--dashboard-text)]">Back to tools</span>
       </Button>
 
       {limitReached && !isActive && <UpgradeNudge activeCount={activeToolCount} limit={limit} />}
@@ -325,7 +327,7 @@ export default function ToolDetailsPage() {
             </span>
           )}
           {!tool.is_active && (
-            <span className="px-3 py-1 text-sm font-medium bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300 rounded-full">
+            <span className="px-3 py-1 text-sm font-medium bg-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)] rounded-full">
               Disabled
             </span>
           )}
@@ -333,43 +335,43 @@ export default function ToolDetailsPage() {
 
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="flex-1">
-            <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">
+            <h1 className="text-3xl font-semibold text-[color:var(--dashboard-text)]">
               {tool.name}
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 max-w-3xl mt-2">
+            <p className="text-[color:var(--dashboard-muted)] max-w-3xl mt-2">
               {tool.description}
             </p>
           </div>
           
           {/* Activation Stats */}
-          <div className="flex md:flex-col items-center gap-4 md:gap-2 bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800">
+          <div className="flex md:flex-col items-center gap-4 md:gap-2 bg-[color:var(--dashboard-surface)] p-4 rounded-lg border border-[color:var(--dashboard-border)]">
             <div className="text-center">
-              <div className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+              <div className="flex items-center gap-1 text-sm text-[color:var(--dashboard-text)]">
                 <Users className="w-4 h-4" />
                 <span className="font-semibold">{activationStats.totalActivations}</span>
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Total Activations</p>
+              <p className="text-xs text-[color:var(--dashboard-muted)]">Total Activations</p>
             </div>
             <div className="text-center">
-              <div className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-300">
+              <div className="flex items-center gap-1 text-sm text-[color:var(--dashboard-text)]">
                 <Activity className="w-4 h-4" />
                 <span className="font-semibold">{activationStats.recentActivations}</span>
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">This Week</p>
+              <p className="text-xs text-[color:var(--dashboard-muted)]">This Week</p>
             </div>
           </div>
         </div>
       </header>
 
       {/* Why this tool exists */}
-      <Card className="p-6 space-y-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+      <Card className="p-6 space-y-3 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-          <h2 className="text-lg font-medium text-gray-900 dark:text-white">
+          <h2 className="text-lg font-medium text-[color:var(--dashboard-text)]">
             Why this tool exists
           </h2>
         </div>
-        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+        <p className="text-sm text-[color:var(--dashboard-text)] leading-relaxed">
           {tool.long_description ||
             "This tool exists to remove friction from common business workflows, helping founders and teams move faster without adding complexity."}
         </p>
@@ -377,14 +379,14 @@ export default function ToolDetailsPage() {
 
       {/* What it helps with */}
       {tool.use_cases && tool.use_cases.length > 0 && (
-        <Card className="p-6 space-y-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
-          <h3 className="font-medium text-gray-900 dark:text-white">
+        <Card className="p-6 space-y-4 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+          <h3 className="font-medium text-[color:var(--dashboard-text)]">
             What this tool helps you do
           </h3>
 
           <ul className="space-y-2">
             {tool.use_cases.map((useCase) => (
-              <li key={useCase} className="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
+              <li key={useCase} className="flex items-start gap-3 text-sm text-[color:var(--dashboard-text)]">
                 <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mt-0.5 flex-shrink-0" />
                 <span>{useCase}</span>
               </li>
@@ -395,8 +397,8 @@ export default function ToolDetailsPage() {
 
       {/* Who it's for */}
       {tool.who_its_for && tool.who_its_for.length > 0 && (
-        <Card className="p-6 space-y-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
-          <h3 className="font-medium text-gray-900 dark:text-white">
+        <Card className="p-6 space-y-3 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+          <h3 className="font-medium text-[color:var(--dashboard-text)]">
             Who this is for
           </h3>
 
@@ -404,7 +406,7 @@ export default function ToolDetailsPage() {
             {tool.who_its_for.map((audience) => (
               <span
                 key={audience}
-                className="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
+                className="text-xs px-3 py-1 rounded-full bg-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)] border border-[color:var(--dashboard-border)]"
               >
                 {audience}
               </span>
@@ -415,57 +417,57 @@ export default function ToolDetailsPage() {
 
       {/* Tool Popularity Stats */}
       {/* <Card className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800">
-        <h3 className="font-medium text-gray-900 dark:text-white mb-4">
+        <h3 className="font-medium text-[color:var(--dashboard-text)] mb-4">
           Tool Popularity
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-lg font-semibold text-gray-900 dark:text-white">
+              <span className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                 {activationStats.totalActivations}
               </span>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-300">Total Activations</p>
+            <p className="text-xs text-[color:var(--dashboard-muted)]">Total Activations</p>
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              <span className="text-lg font-semibold text-gray-900 dark:text-white">
+              <span className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                 {activationStats.recentActivations}
               </span>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-300">This Week</p>
+            <p className="text-xs text-[color:var(--dashboard-muted)]">This Week</p>
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-              <span className="text-lg font-semibold text-gray-900 dark:text-white">
+              <span className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                 {activationStats.averageUsageTime}
               </span>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-300">Avg. Usage</p>
+            <p className="text-xs text-[color:var(--dashboard-muted)]">Avg. Usage</p>
           </div>
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-              <span className="text-lg font-semibold text-gray-900 dark:text-white">
+              <span className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                 {activationStats.popularWithUsers.length > 0 ? activationStats.popularWithUsers[0] : 'All Plans'}
               </span>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-300">Popular With</p>
+            <p className="text-xs text-[color:var(--dashboard-muted)]">Popular With</p>
           </div>
         </div>
       </Card> */}
 
       {/* Activation section */}
-      <Card className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 border border-gray-200 dark:border-gray-800">
+      <Card className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 border border-[color:var(--dashboard-border)]">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-2 flex-1">
-            <h3 className="font-medium text-gray-900 dark:text-white">
+            <h3 className="font-medium text-[color:var(--dashboard-text)]">
               {isActive ? "🎉 Tool is Active" : "⚡ Activate this tool"}
             </h3>
-            <p className="text-sm text-gray-700 dark:text-gray-300">
+            <p className="text-sm text-[color:var(--dashboard-text)]">
               {isActive 
                 ? "You're currently using this tool in your projects. All data is saved and backed up."
                 : `You have ${activeToolCount} / ${isFinite(limit) ? limit : 'Unlimited'} tools active.`
@@ -497,7 +499,7 @@ export default function ToolDetailsPage() {
               <Button 
                 disabled 
                 variant="outline" 
-                className="border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400"
+                className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-muted)]"
               >
                 Tool Disabled
               </Button>
@@ -505,7 +507,7 @@ export default function ToolDetailsPage() {
               <Button 
                 disabled 
                 variant="outline" 
-                className="border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400"
+                className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-muted)]"
               >
                 Limit reached
               </Button>
@@ -533,11 +535,11 @@ export default function ToolDetailsPage() {
 
         {/* Activation benefits */}
         {!isActive && tool.is_active && (
-          <div className="mt-4 p-4 bg-white dark:bg-gray-900 rounded-lg border border-emerald-200 dark:border-emerald-800">
-            <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+          <div className="mt-4 p-4 bg-[color:var(--dashboard-surface)] rounded-lg border border-emerald-200 dark:border-emerald-800">
+            <h4 className="text-sm font-medium text-[color:var(--dashboard-text)] mb-2">
               What happens when you activate:
             </h4>
-            <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+            <ul className="space-y-1 text-sm text-[color:var(--dashboard-text)]">
               <li className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
                 Tool added to your projects dashboard
@@ -560,15 +562,15 @@ export default function ToolDetailsPage() {
       </Card>
 
       {/* Similar tools recommendation */}
-      <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
-        <h3 className="font-medium text-gray-900 dark:text-white mb-4">
+      <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+        <h3 className="font-medium text-[color:var(--dashboard-text)] mb-4">
           Frequently used together
         </h3>
         <div className="flex flex-wrap gap-2">
           {['Project Management', 'Analytics Dashboard', 'File Storage'].map((relatedTool) => (
             <span
               key={relatedTool}
-              className="text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors border border-gray-200 dark:border-gray-700"
+              className="text-xs px-3 py-1 rounded-full bg-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)] hover:bg-[color:var(--dashboard-surface)] cursor-pointer transition-colors border border-[color:var(--dashboard-border)]"
               onClick={() => {
                 // In a real app, this would navigate to the related tool
                 console.log('Navigate to:', relatedTool)

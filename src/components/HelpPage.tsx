@@ -33,9 +33,9 @@ export default function HelpPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-emerald-50/40">
       {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white">
+      <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center gap-3 mb-4">
             <HelpCircle className="w-8 h-8" />
@@ -71,7 +71,7 @@ export default function HelpPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <div className="lg:w-1/4">
-            <Card className="sticky top-24 p-6 border border-gray-200 shadow-sm bg-white/50 backdrop-blur-sm">
+            <Card className="sticky top-24 p-6 border border-emerald-100 shadow-sm bg-white/70 backdrop-blur-sm">
               <div className="mb-6">
                 <div className="relative">
                   <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
@@ -80,13 +80,13 @@ export default function HelpPage() {
                     placeholder="Search help..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black"
+                    className="w-full pl-10 pr-4 py-2 border border-emerald-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-black bg-white"
                   />
                 </div>
               </div>
 
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-5 h-5 text-emerald-600" />
                 Topics
               </h3>
               <nav className="space-y-2">
@@ -94,7 +94,7 @@ export default function HelpPage() {
                   <button
                     key={section.id}
                     onClick={() => scrollToSection(section.id)}
-                    className="block w-full text-left text-sm text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg transition-colors"
+                    className="block w-full text-left text-sm text-slate-600 hover:text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg transition-colors"
                   >
                     {section.title}
                   </button>
@@ -102,7 +102,7 @@ export default function HelpPage() {
               </nav>
 
               <div className="mt-8 pt-6 border-t border-gray-200">
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">Need More Help?</h4>
+                <h4 className="text-sm font-semibold text-slate-900 mb-3">Need More Help?</h4>
                 <Link
                   to="/support"
                   className="flex items-center justify-between text-sm text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-2 rounded-lg transition-colors font-medium"
@@ -118,14 +118,14 @@ export default function HelpPage() {
               <div className="mt-4 space-y-2">
                 <Link
                   to="/privacy"
-                  className="flex items-center justify-between text-sm text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-50 transition-colors"
+                  className="flex items-center justify-between text-sm text-slate-600 hover:text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-50 transition-colors"
                 >
                   <span>Privacy Policy</span>
                   <ExternalLink className="w-4 h-4" />
                 </Link>
                 <Link
                   to="/cookies"
-                  className="flex items-center justify-between text-sm text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-50 transition-colors"
+                  className="flex items-center justify-between text-sm text-slate-600 hover:text-emerald-600 px-3 py-2 rounded-lg hover:bg-emerald-50 transition-colors"
                 >
                   <span>Cookie Policy</span>
                   <ExternalLink className="w-4 h-4" />
@@ -138,7 +138,7 @@ export default function HelpPage() {
           <div className="lg:w-3/4 space-y-12">
             {/* Section 1: Getting Started */}
             <section id="getting-started" className="scroll-mt-24">
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+              <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-emerald-600">1</span>
                   Getting Started
@@ -149,11 +149,11 @@ export default function HelpPage() {
                     Welcome to Mywoki Marketplace! Here's what you need to know to get started.
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card className="p-6 border border-gray-200">
-                      <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                        <Zap className="w-5 h-5 text-emerald-600" />
-                        What is Mywoki?
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card className="p-6 border border-gray-200">
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-emerald-600" />
+                      What is Mywoki?
                       </h3>
                       <p className="text-sm text-gray-600">
                         Mywoki is an all-in-one platform that allows you to activate productivity and automation tools instantly, without setup or technical complexity.
@@ -190,20 +190,32 @@ export default function HelpPage() {
                       </p>
                     </Card>
                   </div>
+
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-emerald-600" />
+                      First 30 minutes checklist
+                    </h3>
+                    <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                      <li>Confirm your business stage and goals</li>
+                      <li>Activate the Idea Validation toolkit</li>
+                      <li>Set one milestone inside your dashboard</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </section>
 
             {/* Section 2: Account & Authentication */}
             <section id="account" className="scroll-mt-24">
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+              <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-emerald-600">2</span>
                   Account & Authentication
                 </h2>
 
                 <div className="space-y-6 text-gray-700">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
                     <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                       <Lock className="w-5 h-5 text-emerald-600" />
                       Passwordless Authentication
@@ -218,11 +230,11 @@ export default function HelpPage() {
                     <p className="text-sm mb-3">
                       If you can't access your account:
                     </p>
-                    <ul className="space-y-2 text-sm text-gray-600 ml-6">
-                      <li>• Visit the login page and enter your email</li>
-                      <li>• Check your email for the verification code</li>
-                      <li>• Enter the code to access your account</li>
-                      <li>• If you don't receive an email, check your spam folder</li>
+                    <ul className="space-y-2 text-sm text-slate-600 ml-6 list-disc">
+                      <li>Visit the login page and enter your email</li>
+                      <li>Check your email for the verification code</li>
+                      <li>Enter the code to access your account</li>
+                      <li>If you do not receive an email, check your spam folder</li>
                     </ul>
                   </div>
 
@@ -241,7 +253,7 @@ export default function HelpPage() {
 
             {/* Section 3: Tools & Features */}
             <section id="tools" className="scroll-mt-24">
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+              <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-emerald-600">3</span>
                   Tools & Features
@@ -274,16 +286,24 @@ export default function HelpPage() {
                     </Card>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
+                    <h3 className="font-semibold text-gray-900 mb-3">Tool limits by plan</h3>
+                    <p className="text-sm text-gray-600">
+                      Your active tools depend on your plan. Upgrade only when you need more
+                      activations or team access.
+                    </p>
+                  </div>
+
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
                     <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                       <Workflow className="w-5 h-5 text-emerald-600" />
                       Using Tools
                     </h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li>• Each tool has dedicated settings accessible from the dashboard</li>
-                      <li>• Customize preferences to match your workflow</li>
-                      <li>• Monitor tool activity and performance</li>
-                      <li>• Export data anytime before deactivating</li>
+                    <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                      <li>Each tool has dedicated settings accessible from the dashboard</li>
+                      <li>Customize preferences to match your workflow</li>
+                      <li>Monitor tool activity and performance</li>
+                      <li>Export data anytime before deactivating</li>
                     </ul>
                   </div>
                 </div>
@@ -292,7 +312,7 @@ export default function HelpPage() {
 
             {/* Section 4: Billing & Plans */}
             <section id="billing" className="scroll-mt-24">
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+              <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-emerald-600">4</span>
                   Billing & Plans
@@ -309,23 +329,31 @@ export default function HelpPage() {
                         <CreditCard className="w-5 h-5 text-emerald-600" />
                         Payment Methods
                       </h3>
-                      <ul className="space-y-2 text-sm text-gray-600">
-                        <li>• Debit and credit cards</li>
-                        <li>• All major card providers supported</li>
-                        <li>• Secure SSL encryption</li>
-                        <li>• PCI-DSS compliant</li>
+                      <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                        <li>Debit and credit cards</li>
+                        <li>All major card providers supported</li>
+                        <li>Secure SSL encryption</li>
+                        <li>PCI-DSS compliant</li>
                       </ul>
                     </Card>
 
                     <Card className="p-6 border border-gray-200">
                       <h3 className="font-semibold text-gray-900 mb-3">Subscription Changes</h3>
-                      <ul className="space-y-2 text-sm text-gray-600">
-                        <li>• Upgrade anytime, changes apply immediately</li>
-                        <li>• Downgrade effective next billing cycle</li>
-                        <li>• Cancel without penalties</li>
-                        <li>• Prorated charges and refunds</li>
+                      <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                        <li>Upgrade anytime, changes apply immediately</li>
+                        <li>Downgrade effective next billing cycle</li>
+                        <li>Cancel without penalties</li>
+                        <li>Prorated charges and refunds</li>
                       </ul>
                     </Card>
+                  </div>
+
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
+                    <h3 className="font-semibold text-gray-900 mb-3">Receipts and invoices</h3>
+                    <p className="text-sm text-gray-600">
+                      Access receipts from your billing settings and share invoices with your team
+                      or accountant when needed.
+                    </p>
                   </div>
 
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
@@ -340,7 +368,7 @@ export default function HelpPage() {
 
             {/* Section 5: Security */}
             <section id="security" className="scroll-mt-24">
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+              <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-emerald-600">5</span>
                   Security
@@ -351,32 +379,32 @@ export default function HelpPage() {
                     Your security and privacy are our top priorities.
                   </p>
 
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
                     <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <Shield className="w-5 h-5 text-green-600" />
+                      <Shield className="w-5 h-5 text-emerald-600" />
                       Our Security Measures
                     </h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li>• End-to-end encryption for all data</li>
-                      <li>• Regular security audits</li>
-                      <li>• Two-factor authentication available</li>
-                      <li>• GDPR and CCPA compliant</li>
-                      <li>• Industry-standard protection protocols</li>
+                    <ul className="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                      <li>End-to-end encryption for all data</li>
+                      <li>Regular security audits</li>
+                      <li>Two-factor authentication available</li>
+                      <li>Privacy-first data handling practices</li>
+                      <li>Industry-standard protection protocols</li>
                     </ul>
                   </div>
 
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-3">Protecting Your Account</h3>
-                    <ul className="space-y-2 text-sm text-gray-600 ml-6">
-                      <li>• Use unique access codes for verification</li>
-                      <li>• Don't share your login link</li>
-                      <li>• Log out on shared computers</li>
-                      <li>• Report suspicious activity immediately</li>
+                    <ul className="space-y-2 text-sm text-slate-600 ml-6 list-disc">
+                      <li>Use unique access codes for verification</li>
+                      <li>Do not share your login link</li>
+                      <li>Log out on shared computers</li>
+                      <li>Report suspicious activity immediately</li>
                     </ul>
                   </div>
 
                   <p className="text-sm text-gray-600">
-                    For detailed information about how we protect your data, please see our <Link to="/privacy" className="text-blue-600 hover:text-blue-700 font-medium">Privacy Policy</Link>.
+                    For detailed information about how we protect your data, please see our <Link to="/privacy" className="text-emerald-600 hover:text-emerald-700 font-medium">Privacy Policy</Link>.
                   </p>
                 </div>
               </div>
@@ -384,7 +412,7 @@ export default function HelpPage() {
 
             {/* Section 6: Troubleshooting */}
             <section id="troubleshooting" className="scroll-mt-24">
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+              <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-emerald-600">6</span>
                   Troubleshooting
@@ -393,33 +421,33 @@ export default function HelpPage() {
                 <div className="space-y-6 text-gray-700">
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-3">Can't log in?</h3>
-                    <ul className="space-y-2 text-sm text-gray-600 ml-6">
-                      <li>• Check your email for the verification code</li>
-                      <li>• Verify the code hasn't expired (15-minute limit)</li>
-                      <li>• Check your spam/junk folder</li>
-                      <li>• Request a new code and try again</li>
+                    <ul className="space-y-2 text-sm text-slate-600 ml-6 list-disc">
+                      <li>Check your email for the verification code</li>
+                      <li>Verify the code has not expired (15-minute limit)</li>
+                      <li>Check your spam or junk folder</li>
+                      <li>Request a new code and try again</li>
                     </ul>
                   </div>
 
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-3">Tool not activating?</h3>
-                    <ul className="space-y-2 text-sm text-gray-600 ml-6">
-                      <li>• Refresh your browser</li>
-                      <li>• Clear browser cache</li>
-                      <li>• Check your internet connection</li>
-                      <li>• Try a different browser</li>
-                      <li>• Contact support if the issue persists</li>
+                    <ul className="space-y-2 text-sm text-slate-600 ml-6 list-disc">
+                      <li>Refresh your browser</li>
+                      <li>Clear browser cache</li>
+                      <li>Check your internet connection</li>
+                      <li>Try a different browser</li>
+                      <li>Contact support if the issue persists</li>
                     </ul>
                   </div>
 
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-3">Payment declined?</h3>
-                    <ul className="space-y-2 text-sm text-gray-600 ml-6">
-                      <li>• Verify card details are correct</li>
-                      <li>• Check card expiration date</li>
-                      <li>• Ensure sufficient funds</li>
-                      <li>• Contact your bank</li>
-                      <li>• Try a different payment method</li>
+                    <ul className="space-y-2 text-sm text-slate-600 ml-6 list-disc">
+                      <li>Verify card details are correct</li>
+                      <li>Check card expiration date</li>
+                      <li>Ensure sufficient funds</li>
+                      <li>Contact your bank</li>
+                      <li>Try a different payment method</li>
                     </ul>
                   </div>
 
@@ -435,7 +463,7 @@ export default function HelpPage() {
 
             {/* Section 7: FAQs */}
             <section id="faq" className="scroll-mt-24">
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+              <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-emerald-600">7</span>
                   Frequently Asked Questions
@@ -502,9 +530,9 @@ export default function HelpPage() {
             </section>
 
             {/* Coming Soon Banner */}
-            <section className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl border border-purple-200 shadow-sm p-8">
+            <section className="bg-gradient-to-r from-emerald-50 to-emerald-100/60 rounded-2xl border border-emerald-200 shadow-sm p-8">
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   My AI Agent Coming Soon
@@ -514,7 +542,7 @@ export default function HelpPage() {
                 </p>
                 <Link
                   to="/dashboard/my-ai-agent"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium"
                 >
                   Learn More
                 </Link>
@@ -522,7 +550,7 @@ export default function HelpPage() {
             </section>
 
             {/* Contact Section */}
-            <section className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl border border-blue-200 shadow-sm p-8">
+            <section className="bg-gradient-to-r from-emerald-50 to-emerald-100/60 rounded-2xl border border-emerald-200 shadow-sm p-8">
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Need personalized assistance?
@@ -532,7 +560,7 @@ export default function HelpPage() {
                 </p>
                 <Link
                   to="/support"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium"
                 >
                   <Headphones className="w-5 h-5" />
                   Start Live Support
@@ -541,7 +569,7 @@ export default function HelpPage() {
             </section>
 
             {/* Last Updated */}
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+            <div className="bg-emerald-50/40 border border-emerald-100 rounded-lg p-6">
               <p className="text-sm text-gray-700">
                 <strong>Last Updated:</strong> {lastUpdated}<br />
                 <strong>Help Center Version:</strong> 1.0<br />

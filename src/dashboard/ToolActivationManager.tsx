@@ -323,10 +323,10 @@ export default function ToolActivationManager() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-[color:var(--dashboard-text)]">
             Tool Activation Manager
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-[color:var(--dashboard-muted)]">
             Monitor and manage tool activations across the platform
           </p>
         </div>
@@ -351,11 +351,11 @@ export default function ToolActivationManager() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="p-6 bg-white dark:bg-gray-900">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Total Activations</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Total Activations</p>
+              <p className="text-2xl font-bold text-[color:var(--dashboard-text)] mt-2">
                 {stats.totalActivations.toLocaleString()}
               </p>
             </div>
@@ -365,11 +365,11 @@ export default function ToolActivationManager() {
           </div>
         </Card>
 
-        <Card className="p-6 bg-white dark:bg-gray-900">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Recent (24h)</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Recent (24h)</p>
+              <p className="text-2xl font-bold text-[color:var(--dashboard-text)] mt-2">
                 {stats.recentActivations}
               </p>
             </div>
@@ -379,11 +379,11 @@ export default function ToolActivationManager() {
           </div>
         </Card>
 
-        <Card className="p-6 bg-white dark:bg-gray-900">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Avg. Per User</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Avg. Per User</p>
+              <p className="text-2xl font-bold text-[color:var(--dashboard-text)] mt-2">
                 {stats.topActivatingUsers.length > 0
                   ? (stats.totalActivations / stats.topActivatingUsers.length).toFixed(1)
                   : '0.0'
@@ -396,11 +396,11 @@ export default function ToolActivationManager() {
           </div>
         </Card>
 
-        <Card className="p-6 bg-white dark:bg-gray-900">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)]">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Growth Trend</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Growth Trend</p>
+              <p className="text-2xl font-bold text-[color:var(--dashboard-text)] mt-2">
                 {stats.activationTrend.length > 1
                   ? stats.activationTrend[stats.activationTrend.length - 1].count
                   : 0
@@ -417,45 +417,45 @@ export default function ToolActivationManager() {
       {/* Top Users and Tools */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Activating Users */}
-        <Card className="p-6 bg-white dark:bg-gray-900">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold text-[color:var(--dashboard-text)]">
               Top Activating Users
             </h3>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-[color:var(--dashboard-muted)]">
               {stats.topActivatingUsers.length} users
             </span>
           </div>
           <div className="space-y-3">
             {loading ? (
               <div className="text-center py-4">
-                <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+                <p className="text-[color:var(--dashboard-muted)]">Loading...</p>
               </div>
             ) : stats.topActivatingUsers.length === 0 ? (
               <div className="text-center py-4">
-                <p className="text-gray-500 dark:text-gray-400">No user data available</p>
+                <p className="text-[color:var(--dashboard-muted)]">No user data available</p>
               </div>
             ) : (
               stats.topActivatingUsers.map((user, index) => (
                 <div
                   key={user.id}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
+                  className="flex items-center justify-between p-3 hover:bg-[color:var(--dashboard-border)] rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center text-white font-medium">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="max-w-[200px]">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                      <p className="text-sm font-medium text-[color:var(--dashboard-text)] truncate">
                         {user.name || 'Unnamed User'}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      <p className="text-xs text-[color:var(--dashboard-muted)] truncate">
                         {user.email}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                    <div className="text-sm font-medium text-[color:var(--dashboard-text)]">
                       {user.count} tools
                     </div>
                     {index < 3 && (
@@ -473,29 +473,29 @@ export default function ToolActivationManager() {
         </Card>
 
         {/* Popular Tools */}
-        <Card className="p-6 bg-white dark:bg-gray-900">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold text-[color:var(--dashboard-text)]">
               Most Popular Tools
             </h3>
-            <span className="text-xs text-gray-500 dark:text-gray-400">
+            <span className="text-xs text-[color:var(--dashboard-muted)]">
               by activations
             </span>
           </div>
           <div className="space-y-3">
             {loading ? (
               <div className="text-center py-4">
-                <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+                <p className="text-[color:var(--dashboard-muted)]">Loading...</p>
               </div>
             ) : stats.popularTools.length === 0 ? (
               <div className="text-center py-4">
-                <p className="text-gray-500 dark:text-gray-400">No tool data available</p>
+                <p className="text-[color:var(--dashboard-muted)]">No tool data available</p>
               </div>
             ) : (
               stats.popularTools.map((tool, index) => (
                 <div
                   key={tool.id}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg"
+                  className="flex items-center justify-between p-3 hover:bg-[color:var(--dashboard-border)] rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
@@ -504,13 +504,13 @@ export default function ToolActivationManager() {
                       </span>
                     </div>
                     <div className="max-w-[200px]">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                      <p className="text-sm font-medium text-[color:var(--dashboard-text)] truncate">
                         {tool.name}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-[color:var(--dashboard-muted)]">
                       {tool.activations.toLocaleString()} activations
                     </div>
                     {index === 0 && (
@@ -527,20 +527,20 @@ export default function ToolActivationManager() {
       </div>
 
       {/* Bulk Actions */}
-      <Card className="p-6 bg-white dark:bg-gray-900">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+      <Card className="p-6 bg-[color:var(--dashboard-surface)]">
+        <h3 className="text-lg font-semibold text-[color:var(--dashboard-text)] mb-4">
           Bulk Notification Sender
         </h3>
         <div className="space-y-4">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[color:var(--dashboard-text)] mb-2">
                 Notification Type
               </label>
               <select
                 value={bulkAction}
                 onChange={(e) => setBulkAction(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-lg border border-[color:var(--dashboard-border)] bg-[color:var(--dashboard-surface)] text-[color:var(--dashboard-text)]"
               >
                 <option value="">Select notification type...</option>
                 <option value="new_features">New Features Announcement</option>
@@ -551,10 +551,10 @@ export default function ToolActivationManager() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[color:var(--dashboard-text)] mb-2">
                 Message Preview
               </label>
-              <div className="text-sm text-gray-600 dark:text-gray-400 p-2 bg-gray-50 dark:bg-gray-800 rounded">
+              <div className="text-sm text-[color:var(--dashboard-muted)] p-2 bg-[color:var(--dashboard-surface)] rounded">
                 {bulkAction === 'new_features' && '🎉 Exciting new features are now available!'}
                 {bulkAction === 'maintenance' && '⚠️ Scheduled maintenance coming soon.'}
                 {bulkAction === 'promotion' && '🎁 Special promotion for our users!'}
@@ -564,29 +564,29 @@ export default function ToolActivationManager() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[color:var(--dashboard-text)] mb-2">
               Custom Message (optional)
             </label>
             <textarea
               value={bulkMessage}
               onChange={(e) => setBulkMessage(e.target.value)}
               placeholder="Enter your custom message here..."
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white min-h-[100px] resize-none"
+              className="w-full px-3 py-2 rounded-lg border border-[color:var(--dashboard-border)] bg-[color:var(--dashboard-surface)] text-[color:var(--dashboard-text)] min-h-[100px] resize-none"
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-xs text-[color:var(--dashboard-muted)] mt-1">
               {bulkMessage.length} characters
             </p>
           </div>
           
           <div className="flex items-center justify-between">
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg">
               <div className="flex items-center gap-3">
                 <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 <div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <p className="text-sm text-[color:var(--dashboard-text)]">
                     Bulk notifications are sent to all active users immediately.
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <p className="text-xs text-[color:var(--dashboard-muted)] mt-1">
                     Use with caution. Notifications cannot be recalled.
                   </p>
                 </div>
@@ -615,12 +615,12 @@ export default function ToolActivationManager() {
       </Card>
 
       {/* Activation Trend */}
-      <Card className="p-6 bg-white dark:bg-gray-900">
+      <Card className="p-6 bg-[color:var(--dashboard-surface)]">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-[color:var(--dashboard-text)]">
             Activation Trend (Last 7 Days)
           </h3>
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-sm text-[color:var(--dashboard-muted)]">
             <Clock className="w-4 h-4" />
             Updated just now
           </div>
@@ -629,11 +629,11 @@ export default function ToolActivationManager() {
         <div className="space-y-2">
           {loading ? (
             <div className="text-center py-4">
-              <p className="text-gray-500 dark:text-gray-400">Loading trend data...</p>
+              <p className="text-[color:var(--dashboard-muted)]">Loading trend data...</p>
             </div>
           ) : stats.activationTrend.length === 0 ? (
             <div className="text-center py-4">
-              <p className="text-gray-500 dark:text-gray-400">No activation data available</p>
+              <p className="text-[color:var(--dashboard-muted)]">No activation data available</p>
             </div>
           ) : (
             stats.activationTrend.map((day) => {
@@ -643,12 +643,12 @@ export default function ToolActivationManager() {
               return (
                 <div key={day.date} className="space-y-1">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-700 dark:text-gray-300">{day.date}</span>
-                    <span className="text-gray-900 dark:text-white font-medium">
+                    <span className="text-[color:var(--dashboard-text)]">{day.date}</span>
+                    <span className="text-[color:var(--dashboard-text)] font-medium">
                       {day.count} activation{day.count !== 1 ? 's' : ''}
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[color:var(--dashboard-border)] rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-gradient-to-r from-emerald-500 to-green-500 transition-all duration-500"
                       style={{ width: `${percentage}%` }}
@@ -663,3 +663,4 @@ export default function ToolActivationManager() {
     </div>
   )
 }
+

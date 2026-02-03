@@ -73,13 +73,13 @@ export default function NotificationsPanel({
   const getCTA = (intent?: string) => {
     switch (intent) {
       case 'activate_tool':
-        return 'Activate →'
+        return 'Activate ->'
       case 'billing':
-        return 'Fix billing →'
+        return 'Fix billing ->'
       case 'review':
-        return 'Review →'
+        return 'Review ->'
       case 'learn':
-        return 'Learn →'
+        return 'Learn ->'
       default:
         return null
     }
@@ -117,10 +117,10 @@ export default function NotificationsPanel({
   }
 
   return (
-    <div className="flex flex-col h-96 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg rounded-lg overflow-hidden">
+    <div className="flex flex-col h-96 w-full bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)] shadow-lg rounded-lg overflow-hidden">
         {/* Header */}
-        <div className="border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Notifications</h2>
+        <div className="border-b border-[color:var(--dashboard-border)] px-6 py-4 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-[color:var(--dashboard-text)]">Notifications</h2>
           <div className="flex items-center gap-2">
             {notifications.some(n => !n.read) && (
               <button
@@ -132,9 +132,9 @@ export default function NotificationsPanel({
             )}
             <button
               onClick={onClose}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-1 hover:bg-[color:var(--dashboard-border)] rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <X className="w-5 h-5 text-[color:var(--dashboard-muted)]" />
             </button>
           </div>
         </div>
@@ -143,18 +143,18 @@ export default function NotificationsPanel({
         <div className="flex-1 overflow-y-auto">
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center px-4">
-              <AlertCircle className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-4" />
-              <p className="text-gray-600 dark:text-gray-400">No notifications yet</p>
-              <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
+              <AlertCircle className="w-12 h-12 text-[color:var(--dashboard-border)] mb-4" />
+              <p className="text-[color:var(--dashboard-text)]">No notifications yet</p>
+              <p className="text-[color:var(--dashboard-muted)] text-sm mt-2">
                 Notifications about your tools and account will appear here
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-200 dark:divide-gray-800">
+            <div className="divide-y divide-[color:var(--dashboard-border)]">
               {notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-4 border-l-4 cursor-pointer transition-all hover:bg-gray-50 dark:hover:bg-gray-800 ${getBackgroundColor(
+                  className={`p-4 border-l-4 cursor-pointer transition-all hover:bg-[color:var(--dashboard-border)] ${getBackgroundColor(
                     notification.type
                   )} ${!notification.read ? 'border-l-green-500' : 'border-transparent'}`}
                   onClick={() => handleNotificationClick(notification)}
@@ -163,21 +163,21 @@ export default function NotificationsPanel({
                     {getIcon(notification.type)}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                        <p className="text-sm font-semibold text-[color:var(--dashboard-text)]">
                           {notification.title}
                         </p>
                         {!notification.read && (
                           <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-1" />
                         )}
                       </div>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{notification.message}</p>
+                      <p className="text-xs text-[color:var(--dashboard-muted)] mt-1">{notification.message}</p>
                       {notification.intent && (
                         <span className="text-xs text-emerald-600 dark:text-emerald-400 mt-2 inline-block">
                           {getCTA(notification.intent)}
                         </span>
                       )}
                       <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs text-gray-500 dark:text-gray-500">
+                        <p className="text-xs text-[color:var(--dashboard-muted)]">
                           {formatTime(notification.created_at)}
                         </p>
                       </div>
@@ -191,7 +191,7 @@ export default function NotificationsPanel({
 
         {/* Footer */}
         {notifications.length > 0 && (
-          <div className="border-t border-gray-200 dark:border-gray-800 p-4">
+          <div className="border-t border-[color:var(--dashboard-border)] p-4">
             <button
               onClick={onClearAll}
               className="w-full py-2 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"

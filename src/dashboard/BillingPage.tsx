@@ -39,8 +39,8 @@ export default function BillingPage() {
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto p-6 space-y-12 text-center">
-        <p className="text-gray-500 dark:text-gray-400">Loading billing details...</p>
+      <div className="max-w-5xl mx-auto p-6 space-y-3 text-center flex flex-col items-center">
+        <p className="text-[color:var(--dashboard-muted)] text-sm">Loading billing details...</p>
       </div>
     )
   }
@@ -49,10 +49,10 @@ export default function BillingPage() {
     <div className="max-w-6xl mx-auto space-y-12 p-4">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-4xl font-bold text-[color:var(--dashboard-text)]">
           Choose your pace
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-3 text-lg">
+        <p className="text-[color:var(--dashboard-muted)] mt-3 text-lg">
           Upgrade only when it feels right.
         </p>
       </div>
@@ -62,14 +62,14 @@ export default function BillingPage() {
         <Button
           variant={billingCycle === 'monthly' ? 'default' : 'outline'}
           onClick={() => setBillingCycle('monthly')}
-          className="dark:border-gray-700 dark:text-gray-300 px-6 py-2"
+          className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)] px-6 py-2"
         >
           Monthly
         </Button>
         <Button
           variant={billingCycle === 'yearly' ? 'default' : 'outline'}
           onClick={() => setBillingCycle('yearly')}
-          className="dark:border-gray-700 dark:text-gray-300 px-6 py-2 relative"
+          className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)] px-6 py-2 relative"
         >
           Yearly
           <Badge className="ml-2 bg-gradient-to-r from-emerald-600 to-green-500 text-white px-2 py-0.5 text-xs">
@@ -112,7 +112,7 @@ export default function BillingPage() {
                 className={`relative p-8 space-y-7 transition-all duration-300 hover:scale-[1.02] ${
                   isRecommended 
                     ? 'border-2 border-emerald-400 bg-gradient-to-br from-emerald-50 via-white to-green-50 dark:from-emerald-950/40 dark:via-gray-900 dark:to-green-950/40 shadow-xl shadow-emerald-100 dark:shadow-emerald-900/20' 
-                    : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800'
+                    : 'bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)]'
                 } ${isCurrentPlan ? 'ring-2 ring-emerald-300 dark:ring-emerald-700' : ''}`}
               >
                 {isRecommended && (
@@ -129,17 +129,17 @@ export default function BillingPage() {
                   <h3 className={`text-2xl font-bold ${
                     isRecommended 
                       ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-green-600 dark:from-emerald-400 dark:to-green-400'
-                      : 'text-gray-900 dark:text-white'
+                      : 'text-[color:var(--dashboard-text)]'
                   }`}>
                     {plan.name}
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                  <p className="text-sm text-[color:var(--dashboard-muted)] mt-2">
                     {plan.note}
                   </p>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="text-4xl font-bold text-gray-900 dark:text-white">
+                  <div className="text-4xl font-bold text-[color:var(--dashboard-text)]">
                     {price}
                   </div>
                   {billingCycle === 'yearly' && plan.yearly && (
@@ -155,8 +155,8 @@ export default function BillingPage() {
                       key={f} 
                       className={`flex items-center gap-3 text-sm ${
                         isRecommended 
-                          ? 'text-gray-800 dark:text-gray-200' 
-                          : 'text-gray-700 dark:text-gray-300'
+                          ? 'text-[color:var(--dashboard-text)]' 
+                          : 'text-[color:var(--dashboard-text)]'
                       }`}
                     >
                       <Check className={`w-5 h-5 ${
@@ -190,11 +190,11 @@ export default function BillingPage() {
       </div>
 
       {/* Cancel copy */}
-      <Card className="p-8 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 text-center border-gray-200 dark:border-gray-800 rounded-2xl">
-        <p className="text-gray-700 dark:text-gray-300 text-lg">
+      <Card className="p-8 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 text-center border-[color:var(--dashboard-border)] rounded-2xl">
+        <p className="text-[color:var(--dashboard-text)] text-lg">
           You can pause or downgrade anytime.
           <br />
-          <span className="font-medium text-gray-900 dark:text-white">
+          <span className="font-medium text-[color:var(--dashboard-text)]">
             Nothing breaks. Your tools stay safe.
           </span>
         </p>

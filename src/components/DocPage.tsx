@@ -19,9 +19,9 @@ export default function DocPage() {
       description: 'Learn how to use the platform and activate your first tools',
       content: (
         <div className="space-y-8">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <HelpCircle className="w-5 h-5 text-blue-600" />
+              <HelpCircle className="w-5 h-5 text-emerald-600" />
               Welcome to Mywoki Marketplace
             </h3>
             <p className="text-sm text-gray-600">
@@ -34,7 +34,7 @@ export default function DocPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-emerald-600" />
                   1. Create Your Account
                 </h4>
                 <p className="text-sm text-gray-600">
@@ -44,7 +44,7 @@ export default function DocPage() {
 
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <Settings className="w-5 h-5 text-blue-600" />
+                  <Settings className="w-5 h-5 text-emerald-600" />
                   2. Access Your Dashboard
                 </h4>
                 <p className="text-sm text-gray-600">
@@ -54,7 +54,7 @@ export default function DocPage() {
 
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-yellow-600" />
+                  <Zap className="w-5 h-5 text-emerald-600" />
                   3. Explore Tools
                 </h4>
                 <p className="text-sm text-gray-600">
@@ -64,7 +64,7 @@ export default function DocPage() {
 
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-emerald-600" />
                   4. Activate Your First Tool
                 </h4>
                 <p className="text-sm text-gray-600">
@@ -82,9 +82,9 @@ export default function DocPage() {
       description: 'How to activate and manage tools in your workspace',
       content: (
         <div className="space-y-8">
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-green-600" />
+              <Zap className="w-5 h-5 text-emerald-600" />
               Tool Activation Process
             </h3>
             <p className="text-sm text-gray-600">
@@ -145,9 +145,9 @@ export default function DocPage() {
       description: 'Common questions about plans, billing, and upgrades',
       content: (
         <div className="space-y-8">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-blue-600" />
+              <CreditCard className="w-5 h-5 text-emerald-600" />
               Billing Overview
             </h3>
             <p className="text-sm text-gray-600">
@@ -203,9 +203,9 @@ export default function DocPage() {
       description: 'How to integrate external services with our platform',
       content: (
         <div className="space-y-8">
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Settings className="w-5 h-5 text-purple-600" />
+              <Settings className="w-5 h-5 text-emerald-600" />
               API Integration Overview
             </h3>
             <p className="text-sm text-gray-600">
@@ -221,10 +221,10 @@ export default function DocPage() {
                 <p className="text-sm text-gray-600 mb-3">
                   Full REST API access for programmatic tool management and data retrieval.
                 </p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• JSON-based requests</li>
-                  <li>• OAuth 2.0 authentication</li>
-                  <li>• Rate limiting included</li>
+                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                  <li>JSON-based requests</li>
+                  <li>OAuth 2.0 authentication</li>
+                  <li>Rate limiting included</li>
                 </ul>
               </Card>
 
@@ -233,10 +233,10 @@ export default function DocPage() {
                 <p className="text-sm text-gray-600 mb-3">
                   Real-time notifications for tool events and status changes.
                 </p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Instant event delivery</li>
-                  <li>• Configurable endpoints</li>
-                  <li>• Retry mechanisms</li>
+                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                  <li>Instant event delivery</li>
+                  <li>Configurable endpoints</li>
+                  <li>Retry mechanisms</li>
                 </ul>
               </Card>
 
@@ -245,10 +245,10 @@ export default function DocPage() {
                 <p className="text-sm text-gray-600 mb-3">
                   Official SDKs for popular programming languages.
                 </p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• JavaScript/TypeScript</li>
-                  <li>• Python</li>
-                  <li>• PHP</li>
+                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                  <li>JavaScript and TypeScript</li>
+                  <li>Python</li>
+                  <li>PHP</li>
                 </ul>
               </Card>
 
@@ -257,10 +257,10 @@ export default function DocPage() {
                 <p className="text-sm text-gray-600 mb-3">
                   Connect with 2000+ apps through our Zapier integration.
                 </p>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• No-code automation</li>
-                  <li>• Pre-built templates</li>
-                  <li>• Real-time sync</li>
+                <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+                  <li>No-code automation</li>
+                  <li>Pre-built templates</li>
+                  <li>Real-time sync</li>
                 </ul>
               </Card>
             </div>
@@ -274,9 +274,9 @@ export default function DocPage() {
       description: 'Tips and best practices for optimizing your workflow',
       content: (
         <div className="space-y-8">
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-6">
             <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+              <CheckCircle className="w-5 h-5 text-emerald-600" />
               Optimization Tips
             </h3>
             <p className="text-sm text-gray-600">
@@ -289,41 +289,41 @@ export default function DocPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3">Tool Selection</h4>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  <li>• Start with 3-5 core tools</li>
-                  <li>• Choose tools that complement each other</li>
-                  <li>• Regularly review and deactivate unused tools</li>
-                  <li>• Test tools before committing to premium plans</li>
+                <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                  <li>Start with 3-5 core tools</li>
+                  <li>Choose tools that complement each other</li>
+                  <li>Regularly review and deactivate unused tools</li>
+                  <li>Test tools before committing to premium plans</li>
                 </ul>
               </Card>
 
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3">Organization</h4>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  <li>• Use clear naming conventions</li>
-                  <li>• Group related tools by project</li>
-                  <li>• Set up automated backups</li>
-                  <li>• Document your workflows</li>
+                <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                  <li>Use clear naming conventions</li>
+                  <li>Group related tools by project</li>
+                  <li>Set up automated backups</li>
+                  <li>Document your workflows</li>
                 </ul>
               </Card>
 
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3">Security</h4>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  <li>• Use strong, unique passwords</li>
-                  <li>• Enable two-factor authentication</li>
-                  <li>• Regularly review access permissions</li>
-                  <li>• Keep tools updated</li>
+                <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                  <li>Use strong, unique passwords</li>
+                  <li>Enable two-factor authentication</li>
+                  <li>Regularly review access permissions</li>
+                  <li>Keep tools updated</li>
                 </ul>
               </Card>
 
               <Card className="p-6 border border-gray-200">
                 <h4 className="font-semibold text-gray-900 mb-3">Performance</h4>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  <li>• Monitor tool usage analytics</li>
-                  <li>• Optimize tool configurations</li>
-                  <li>• Clean up old data regularly</li>
-                  <li>• Use automation to reduce manual tasks</li>
+                <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside">
+                  <li>Monitor tool usage analytics</li>
+                  <li>Optimize tool configurations</li>
+                  <li>Clean up old data regularly</li>
+                  <li>Use automation to reduce manual tasks</li>
                 </ul>
               </Card>
             </div>
@@ -340,9 +340,9 @@ export default function DocPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-emerald-50/40">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+      <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex items-center gap-3 mb-4">
             {doc.icon}
@@ -373,9 +373,9 @@ export default function DocPage() {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center space-x-2 text-sm text-gray-600">
-            <Link to="/" className="hover:text-blue-600">Home</Link>
+            <Link to="/" className="hover:text-emerald-600">Home</Link>
             <span>/</span>
-            <Link to="/help" className="hover:text-blue-600">Help</Link>
+            <Link to="/help" className="hover:text-emerald-600">Help</Link>
             <span>/</span>
             <span className="text-gray-900 font-medium">{doc.title}</span>
           </nav>
@@ -387,11 +387,11 @@ export default function DocPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <div className="lg:w-1/4">
-            <Card className="sticky top-24 p-6 border border-gray-200 shadow-sm bg-white/50 backdrop-blur-sm">
+            <Card className="sticky top-24 p-6 border border-emerald-100 shadow-sm bg-white/70 backdrop-blur-sm">
               <div className="mb-6">
                 <Link
                   to="/help"
-                  className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="flex items-center gap-2 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to Help Center
@@ -408,8 +408,8 @@ export default function DocPage() {
                     to={`/doc/${key}`}
                     className={`block text-sm px-3 py-2 rounded-lg transition-colors ${
                       key === id
-                        ? 'bg-blue-100 text-blue-700 font-medium'
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                        ? 'bg-emerald-100 text-emerald-700 font-medium'
+                        : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
                     }`}
                   >
                     {docItem.title}
@@ -421,7 +421,7 @@ export default function DocPage() {
                 <h4 className="text-sm font-semibold text-gray-900 mb-3">Need More Help?</h4>
                 <Link
                   to="/help"
-                  className="flex items-center justify-between text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors font-medium"
+                  className="flex items-center justify-between text-sm text-white bg-emerald-600 hover:bg-emerald-700 px-3 py-2 rounded-lg transition-colors font-medium"
                 >
                   <div className="flex items-center gap-2">
                     <ExternalLink className="w-4 h-4" />
@@ -434,12 +434,28 @@ export default function DocPage() {
 
           {/* Main Content */}
           <div className="lg:w-3/4">
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
+            <div className="bg-white/80 rounded-2xl border border-emerald-100 shadow-sm p-8 backdrop-blur-sm">
               {doc.content}
             </div>
 
+            <div className="mt-8 grid md:grid-cols-2 gap-6">
+              <div className="rounded-2xl border border-emerald-100 bg-white/80 p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">What to do next</h3>
+                <p className="text-sm text-gray-600">
+                  Apply this guide, then return to your dashboard to activate the next toolkit
+                  that matches your current goal.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-emerald-100 bg-white/80 p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Need a quick answer?</h3>
+                <p className="text-sm text-gray-600">
+                  Open live support from the Help Center or contact our team for guided setup.
+                </p>
+              </div>
+            </div>
+
             {/* Footer */}
-            <div className="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-6">
+            <div className="mt-8 bg-emerald-50/40 border border-emerald-100 rounded-lg p-6">
               <p className="text-sm text-gray-700">
                 <strong>Last Updated:</strong> {lastUpdated}<br />
                 <strong>Document ID:</strong> {id}<br />

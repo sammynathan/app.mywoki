@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { Card } from "../components/ui/card"
 import { Button } from "../components/ui/button"
+import MyWokiLoader from "../components/MyWokiLoader"
 import { supabase } from "../lib/supabase"
 import { useNavigate } from "react-router-dom"
 import { 
@@ -369,7 +370,7 @@ export default function UsageAnalyticsPage() {
       case "high": return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       case "medium": return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
       case "low": return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400"
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
+      default: return "bg-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
     }
   }
 
@@ -382,10 +383,10 @@ export default function UsageAnalyticsPage() {
       {/* Header with real-time controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-2">
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-semibold text-[color:var(--dashboard-text)]">
             Usage Analytics
           </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-[color:var(--dashboard-muted)]">
             Live insights into your tool usage and productivity
           </p>
         </div>
@@ -396,17 +397,17 @@ export default function UsageAnalyticsPage() {
             <div className={`flex items-center gap-1 ${
               realTimeUpdates.isLive 
                 ? "text-emerald-600 dark:text-emerald-400" 
-                : "text-gray-500 dark:text-gray-400"
+                : "text-[color:var(--dashboard-muted)]"
             }`}>
               <div className={`w-2 h-2 rounded-full ${
                 realTimeUpdates.isLive 
                   ? "bg-emerald-500 animate-pulse" 
-                  : "bg-gray-400"
+                  : "bg-[color:var(--dashboard-muted)]"
               }`} />
               <span>{realTimeUpdates.isLive ? "Live" : "Paused"}</span>
             </div>
-            <span className="text-gray-400 dark:text-gray-600">•</span>
-            <span className="text-gray-500 dark:text-gray-400">
+            <span className="text-[color:var(--dashboard-muted)]">-</span>
+            <span className="text-[color:var(--dashboard-muted)]">
               Updated {realTimeUpdates.lastUpdate}
             </span>
           </div>
@@ -416,7 +417,7 @@ export default function UsageAnalyticsPage() {
             variant="outline"
             size="sm"
             onClick={toggleLiveUpdates}
-            className="dark:border-gray-700 dark:text-gray-300"
+            className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
           >
             {realTimeUpdates.isLive ? "Pause" : "Resume"} Live
           </Button>
@@ -425,7 +426,7 @@ export default function UsageAnalyticsPage() {
             size="sm"
             onClick={manualRefresh}
             disabled={loading}
-            className="dark:border-gray-700 dark:text-gray-300"
+            className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -464,11 +465,11 @@ export default function UsageAnalyticsPage() {
 
       {/* Metrics */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Active tools</p>
-              <p className="text-2xl font-semibold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Active tools</p>
+              <p className="text-2xl font-semibold text-[color:var(--dashboard-text)] mt-2">
                 {loading ? "—" : activeTools.length}
               </p>
               <div className="mt-2">
@@ -483,14 +484,14 @@ export default function UsageAnalyticsPage() {
           </div>
         </Card>
 
-        <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Used this week</p>
-              <p className="text-2xl font-semibold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Used this week</p>
+              <p className="text-2xl font-semibold text-[color:var(--dashboard-text)] mt-2">
                 {loading ? "—" : usedThisWeek}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              <p className="text-xs text-[color:var(--dashboard-muted)] mt-2">
                 {usedThisWeek === 0 ? "Start using your tools!" : 
                  usedThisWeek <= 2 ? "Keep going!" : 
                  "Great engagement!"}
@@ -502,14 +503,14 @@ export default function UsageAnalyticsPage() {
           </div>
         </Card>
 
-        <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Daily average</p>
-              <p className="text-2xl font-semibold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Daily average</p>
+              <p className="text-2xl font-semibold text-[color:var(--dashboard-text)] mt-2">
                 {loading ? "—" : usageStats.dailyAverage.toFixed(1)}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              <p className="text-xs text-[color:var(--dashboard-muted)] mt-2">
                 tools per day
               </p>
             </div>
@@ -519,16 +520,16 @@ export default function UsageAnalyticsPage() {
           </div>
         </Card>
 
-        <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+        <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Plan limit</p>
-              <p className="text-2xl font-semibold text-gray-900 dark:text-white mt-2">
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Plan limit</p>
+              <p className="text-2xl font-semibold text-[color:var(--dashboard-text)] mt-2">
                 {limit === Infinity
                   ? "Unlimited"
                   : `${activeTools.length} / ${limit}`}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              <p className="text-xs text-[color:var(--dashboard-muted)] mt-2">
                 {limit === Infinity ? "Growth plan" : `${Math.round((activeTools.length / limit) * 100)}% used`}
               </p>
             </div>
@@ -540,12 +541,12 @@ export default function UsageAnalyticsPage() {
       </div>
 
       {/* Usage Statistics */}
-      <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+      <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold text-[color:var(--dashboard-text)]">
             Usage Statistics
           </h3>
-          <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+          <span className="text-xs text-[color:var(--dashboard-muted)] flex items-center gap-1">
             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
             Live data
           </span>
@@ -558,13 +559,13 @@ export default function UsageAnalyticsPage() {
                 <BarChart3 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Peak Usage Day</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                <p className="text-sm text-[color:var(--dashboard-muted)]">Peak Usage Day</p>
+                <p className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                   {usageStats.peakUsageDay}
                 </p>
               </div>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-[color:var(--dashboard-muted)]">
               Most active day based on your usage patterns
             </p>
           </div>
@@ -575,13 +576,13 @@ export default function UsageAnalyticsPage() {
                 <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Most Used Tool</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white truncate">
+                <p className="text-sm text-[color:var(--dashboard-muted)]">Most Used Tool</p>
+                <p className="text-lg font-semibold text-[color:var(--dashboard-text)] truncate">
                   {usageStats.mostUsedTool || "None yet"}
                 </p>
               </div>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-[color:var(--dashboard-muted)]">
               Based on recent activity
             </p>
           </div>
@@ -592,13 +593,13 @@ export default function UsageAnalyticsPage() {
                 <Activity className="w-5 h-5 text-purple-600 dark:text-purple-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total Usage Time</p>
-                <p className="text-lg font-semibold text-gray-900 dark:text-white">
+                <p className="text-sm text-[color:var(--dashboard-muted)]">Total Usage Time</p>
+                <p className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                   {usageStats.totalUsageTime} days
                 </p>
               </div>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-[color:var(--dashboard-muted)]">
               Cumulative tool usage duration
             </p>
           </div>
@@ -606,13 +607,13 @@ export default function UsageAnalyticsPage() {
       </Card>
 
       {/* Active tools list */}
-      <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
+      <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-lg font-semibold text-[color:var(--dashboard-text)]">
               Active Tools
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-[color:var(--dashboard-muted)] mt-1">
               Real-time status of your activated tools
             </p>
           </div>
@@ -621,7 +622,7 @@ export default function UsageAnalyticsPage() {
               variant="outline"
               size="sm"
               onClick={() => navigate("/dashboard/tools")}
-              className="dark:border-gray-700 dark:text-gray-300"
+              className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
             >
               Manage tools
             </Button>
@@ -629,7 +630,7 @@ export default function UsageAnalyticsPage() {
               variant="outline"
               size="sm"
               onClick={() => navigate("/dashboard")}
-              className="dark:border-gray-700 dark:text-gray-300"
+              className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
             >
               Go to Dashboard
             </Button>
@@ -637,23 +638,21 @@ export default function UsageAnalyticsPage() {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">
-            <div className="w-12 h-12 mx-auto rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-              <RefreshCw className="w-6 h-6 text-gray-400 dark:text-gray-600 animate-spin" />
-            </div>
-            <p className="text-gray-600 dark:text-gray-400">
+          <div className="text-center py-8 flex flex-col items-center gap-3">
+            <MyWokiLoader />
+            <p className="text-[color:var(--dashboard-muted)] text-sm">
               Loading your tools...
             </p>
           </div>
         ) : activeTools.length === 0 ? (
           <div className="text-center py-8">
-            <div className="w-16 h-16 mx-auto rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-              <Zap className="w-8 h-8 text-gray-400 dark:text-gray-600" />
+            <div className="w-16 h-16 mx-auto rounded-full bg-[color:var(--dashboard-border)] flex items-center justify-center mb-4">
+              <Zap className="w-8 h-8 text-[color:var(--dashboard-muted)]" />
             </div>
-            <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <h4 className="text-lg font-medium text-[color:var(--dashboard-text)] mb-2">
               No active tools yet
             </h4>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-[color:var(--dashboard-muted)] mb-4">
               Activate your first tool to start tracking usage analytics
             </p>
             <Button
@@ -668,7 +667,7 @@ export default function UsageAnalyticsPage() {
             {activeTools.map((tool) => (
               <div
                 key={tool.id}
-                className="flex items-center justify-between p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-800 group"
+                className="flex items-center justify-between p-4 rounded-lg hover:bg-[color:var(--dashboard-border)] transition-colors border border-[color:var(--dashboard-border)] group"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -676,18 +675,18 @@ export default function UsageAnalyticsPage() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-medium text-gray-900 dark:text-white">
+                      <h4 className="font-medium text-[color:var(--dashboard-text)]">
                         {tool.tools.name}
                       </h4>
                       <span className="px-2 py-0.5 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 rounded-full">
                         {tool.tools.category}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-1">
+                    <p className="text-sm text-[color:var(--dashboard-muted)] mt-1 line-clamp-1">
                       {tool.tools.description}
                     </p>
                     <div className="flex items-center gap-4 mt-2">
-                      <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                      <span className="text-xs text-[color:var(--dashboard-muted)] flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         Activated {new Date(tool.activated_at).toLocaleDateString()}
                       </span>
@@ -702,7 +701,7 @@ export default function UsageAnalyticsPage() {
                 </div>
 
                 <div className="flex flex-col items-end gap-2">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-[color:var(--dashboard-muted)]">
                     {tool.last_used_at
                       ? `Last used ${new Date(tool.last_used_at).toLocaleDateString()}`
                       : "Awaiting first use"}
@@ -758,18 +757,18 @@ export default function UsageAnalyticsPage() {
       )}
 
       {/* Insights & Recommendations */}
-      <Card className="p-6 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
+      <Card className="p-6 bg-[color:var(--dashboard-surface)] border border-[color:var(--dashboard-border)]">
+        <h3 className="text-lg font-semibold text-[color:var(--dashboard-text)] mb-6">
           Insights & Recommendations
         </h3>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Usage Pattern</h4>
+                <h4 className="font-medium text-[color:var(--dashboard-text)]">Usage Pattern</h4>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+              <p className="text-sm text-[color:var(--dashboard-text)]">
                 {usedThisWeek === 0 
                   ? "Start using your activated tools to see usage patterns and get personalized recommendations."
                   : usedThisWeek <= 2
@@ -779,12 +778,12 @@ export default function UsageAnalyticsPage() {
               </p>
             </div>
             
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Tool Efficiency</h4>
+                <h4 className="font-medium text-[color:var(--dashboard-text)]">Tool Efficiency</h4>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+              <p className="text-sm text-[color:var(--dashboard-text)]">
                 {activeTools.length === 0
                   ? "Activate tools based on your workflow needs to improve productivity."
                   : `You have ${activeTools.length} active tool${activeTools.length !== 1 ? 's' : ''}. ${activeTools.length > 3 ? 'Consider focusing on your most used tools for better efficiency.' : 'Good balance of active tools.'}`
@@ -794,23 +793,23 @@ export default function UsageAnalyticsPage() {
           </div>
 
           <div className="space-y-4">
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <BarChart3 className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Analytics Tip</h4>
+                <h4 className="font-medium text-[color:var(--dashboard-text)]">Analytics Tip</h4>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+              <p className="text-sm text-[color:var(--dashboard-text)]">
                 Check back regularly to see how your tool usage evolves. The more you use your tools, 
                 the better insights we can provide about your workflow efficiency.
               </p>
             </div>
             
-            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                <h4 className="font-medium text-gray-900 dark:text-white">Live Updates</h4>
+                <h4 className="font-medium text-[color:var(--dashboard-text)]">Live Updates</h4>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+              <p className="text-sm text-[color:var(--dashboard-text)]">
                 This page updates in real-time. When you activate or use tools elsewhere in the app, 
                 you'll see the changes reflected here automatically.
               </p>
@@ -821,3 +820,4 @@ export default function UsageAnalyticsPage() {
     </div>
   )
 }
+

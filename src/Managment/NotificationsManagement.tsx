@@ -6,6 +6,7 @@ import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
 
 import { supabase } from "../lib/supabase"
+import MyWokiLoader from "../components/MyWokiLoader"
 import {
   Send,
   Bell,
@@ -352,8 +353,9 @@ export default function NotificationsManagement() {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500 dark:text-gray-400">Loading templates...</p>
+          <div className="text-center py-8 flex flex-col items-center gap-3">
+            <MyWokiLoader />
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Loading templates...</p>
           </div>
         ) : templates.length === 0 ? (
           <div className="text-center py-8">

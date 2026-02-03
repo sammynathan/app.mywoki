@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Card } from '../components/ui/card'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
@@ -198,25 +198,25 @@ export default function AccountSettingsPage() {
 
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl font-bold text-[color:var(--dashboard-text)]">
           Account settings
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-[color:var(--dashboard-muted)]">
           Manage your preferences and account details
         </p>
       </header>
 
       {/* Profile Section */}
-      <Card className="p-6 space-y-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+      <Card className="p-6 space-y-6 bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
             <User className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
-            <h2 className="font-semibold text-lg text-gray-900 dark:text-white">
+            <h2 className="font-semibold text-lg text-[color:var(--dashboard-text)]">
               Profile
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[color:var(--dashboard-muted)]">
               Name, email, and basic info
             </p>
           </div>
@@ -224,7 +224,7 @@ export default function AccountSettingsPage() {
 
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">
+            <Label htmlFor="name" className="text-[color:var(--dashboard-text)]">
               Full name
             </Label>
             <Input
@@ -232,12 +232,12 @@ export default function AccountSettingsPage() {
               value={profile.name}
               onChange={(e) => setProfile(prev => ({ ...prev, name: e.target.value }))}
               placeholder="Your name"
-              className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white"
+              className="bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 dark:text-gray-300">
+            <Label htmlFor="email" className="text-[color:var(--dashboard-text)]">
               Email address
             </Label>
             <Input
@@ -245,9 +245,9 @@ export default function AccountSettingsPage() {
               type="email"
               value={profile.email}
               disabled
-              className="bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white cursor-not-allowed"
+              className="bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)] cursor-not-allowed"
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-[color:var(--dashboard-muted)]">
               Email cannot be changed
             </p>
           </div>
@@ -273,23 +273,23 @@ export default function AccountSettingsPage() {
       </Card>
 
       {/* Focus & Intent */}
-      <Card className="p-6 space-y-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+      <Card className="p-6 space-y-6 bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-            <span className="text-blue-600 dark:text-blue-400">🎯</span>
+            <span className="text-blue-600 dark:text-blue-400">ðŸŽ¯</span>
           </div>
           <div>
-            <h2 className="font-semibold text-lg text-gray-900 dark:text-white">
+            <h2 className="font-semibold text-lg text-[color:var(--dashboard-text)]">
               Focus & intent
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[color:var(--dashboard-muted)]">
               Update what you're working on. This affects tool recommendations.
             </p>
           </div>
         </div>
 
-        <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+        <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg">
+          <p className="text-sm text-[color:var(--dashboard-text)] mb-3">
             Your current preferences help us recommend the right tools for your workflow.
           </p>
           <Button 
@@ -303,16 +303,16 @@ export default function AccountSettingsPage() {
       </Card>
 
       {/* Notifications */}
-      <Card className="p-6 space-y-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+      <Card className="p-6 space-y-6 bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
             <Bell className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           </div>
           <div>
-            <h2 className="font-semibold text-lg text-gray-900 dark:text-white">
+            <h2 className="font-semibold text-lg text-[color:var(--dashboard-text)]">
               Notifications
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[color:var(--dashboard-muted)]">
               Choose what deserves your attention.
             </p>
           </div>
@@ -320,12 +320,12 @@ export default function AccountSettingsPage() {
 
         <div className="space-y-4">
           {Object.entries(notifications).map(([key, value]) => (
-            <div key={key} className="flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
+            <div key={key} className="flex items-center justify-between p-3 hover:bg-[color:var(--dashboard-border)] rounded-lg">
               <div>
-                <p className="font-medium text-gray-900 dark:text-white capitalize">
+                <p className="font-medium text-[color:var(--dashboard-text)] capitalize">
                   {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-[color:var(--dashboard-muted)]">
                   Receive {key.replace(/([A-Z])/g, ' $1').toLowerCase()} via email
                 </p>
               </div>
@@ -360,16 +360,16 @@ export default function AccountSettingsPage() {
       </Card>
 
       {/* Billing */}
-      <Card className="p-6 space-y-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+      <Card className="p-6 space-y-6 bg-[color:var(--dashboard-surface)] border-[color:var(--dashboard-border)]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
             <Shield className="w-5 h-5 text-amber-600 dark:text-amber-400" />
           </div>
           <div>
-            <h2 className="font-semibold text-lg text-gray-900 dark:text-white">
+            <h2 className="font-semibold text-lg text-[color:var(--dashboard-text)]">
               Billing & subscription
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-[color:var(--dashboard-muted)]">
               View plan, invoices, and limits.
             </p>
           </div>
@@ -381,11 +381,11 @@ export default function AccountSettingsPage() {
               <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
                 Current plan
               </p>
-              <p className="text-lg font-semibold text-gray-900 dark:text-white">
+              <p className="text-lg font-semibold text-[color:var(--dashboard-text)]">
                 Starter
               </p>
-              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                3 active tools • Unlimited projects
+              <p className="text-xs text-[color:var(--dashboard-muted)] mt-1">
+                3 active tools - Unlimited projects
               </p>
             </div>
             <Button
@@ -415,11 +415,11 @@ export default function AccountSettingsPage() {
         </div>
 
         <div className="space-y-4">
-          <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-red-200 dark:border-red-800">
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+          <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg border border-red-200 dark:border-red-800">
+            <h3 className="font-medium text-[color:var(--dashboard-text)] mb-2">
               Delete account
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm text-[color:var(--dashboard-muted)] mb-4">
               Permanently delete your account and all associated data. This action cannot be undone.
             </p>
             
@@ -433,7 +433,7 @@ export default function AccountSettingsPage() {
                   value={deleteConfirm}
                   onChange={(e) => setDeleteConfirm(e.target.value)}
                   placeholder="DELETE"
-                  className="border-red-300 dark:border-red-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  className="border-red-300 dark:border-red-700 bg-[color:var(--dashboard-surface)] text-[color:var(--dashboard-text)]"
                 />
               </div>
               
@@ -458,16 +458,16 @@ export default function AccountSettingsPage() {
             </div>
           </div>
 
-          <div className="p-4 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+          <div className="p-4 bg-[color:var(--dashboard-surface)] rounded-lg border border-[color:var(--dashboard-border)]">
+            <h3 className="font-medium text-[color:var(--dashboard-text)] mb-2">
               Export data
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-sm text-[color:var(--dashboard-muted)] mb-4">
               Download all your data in a portable format.
             </p>
             <Button
               variant="outline"
-              className="border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300"
+              className="border-[color:var(--dashboard-border)] text-[color:var(--dashboard-text)]"
             >
               Export all data
             </Button>
@@ -477,3 +477,4 @@ export default function AccountSettingsPage() {
     </div>
   )
 }
+
