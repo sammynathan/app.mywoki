@@ -6,11 +6,21 @@ import { useNavigate } from "react-router-dom"
 import { ArrowRight, Sparkles } from "lucide-react"
 import MyWokiLoader from "../components/MyWokiLoader"
 import { subscribeToolActivationChange } from "../lib/tool-activation-events"
+import { useAuth } from "../auth/AuthContext"
 
 export default function DashboardOverview() {
   const navigate = useNavigate()
+  const { name } = useAuth()
   const [projects, setProjects] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const firstName = name?.trim().split(" ")[0] || ""
+
+  const getTimeGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return "Good morning"
+    if (hour < 18) return "Good afternoon"
+    return "Good evening"
+  }
 
   const loadProjects = useCallback(async () => {
     const userId = localStorage.getItem("user_id")
@@ -48,10 +58,13 @@ export default function DashboardOverview() {
         <div className="flex items-start justify-between">
           <div className="space-y-3">
             <h1 className="text-2xl font-semibold text-[color:var(--dashboard-text)]">
-              Welcome back to your workspace
+              Welcome back{firstName ? `, ${firstName}` : " to your workspace"}
             </h1>
             <p className="text-[color:var(--dashboard-muted)] max-w-2xl">
               Everything you've activated lives here. Keep building, keep creating.
+            </p>
+            <p className="text-sm text-[color:var(--dashboard-muted)]">
+              {getTimeGreeting()} - let's move one thing forward today.
             </p>
           </div>
           <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30">
@@ -98,7 +111,7 @@ export default function DashboardOverview() {
               No active projects yet.
             </p>
             <p className="text-sm text-[color:var(--dashboard-muted)] mt-1">
-              Activate your first tool to start building.
+              Activate your first tool to start building. Most founders start with Validation or Planning.
             </p>
             <Button
               className="mt-6"
@@ -134,6 +147,17 @@ export default function DashboardOverview() {
                     Activated{" "}
                     {new Date(project.created_at).toLocaleDateString()}
                   </span>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      navigate(`/dashboard/projects/${project.id}#project-notes`)
+                    }}
+                  >
+                    Continue
+                  </Button>
                 </div>
               </div>
             </Card>
@@ -153,8 +177,13 @@ export default function DashboardOverview() {
           </span>{" "}
           active project{projects.length !== 1 && "s"}.
           <br />
-          Keep things focused — fewer active tools usually means better progress.
+          Keep things focused - fewer active tools usually means better progress.
         </p>
+        {projects.length > 3 && (
+          <p className="text-sm text-[color:var(--dashboard-muted)] mt-3">
+            You have quite a few active tools. Consider pausing one to focus deeply.
+          </p>
+        )}
         {projects.length === 0 && (
           <Button
             className="mt-4"
@@ -191,8 +220,8 @@ export default function DashboardOverview() {
               <span className="text-purple-600 dark:text-purple-400">🎯</span>
             </div>
             <div>
-              <p className="font-medium text-[color:var(--dashboard-text)]">Goals</p>
-              <p className="text-sm text-[color:var(--dashboard-muted)]">Set milestones</p>
+              <p className="font-medium text-[color:var(--dashboard-text)]">Focus</p>
+              <p className="text-sm text-[color:var(--dashboard-muted)]">Set your focus</p>
             </div>
           </div>
         </Card>

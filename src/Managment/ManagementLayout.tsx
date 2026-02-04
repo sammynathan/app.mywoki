@@ -1,6 +1,7 @@
 
 import { Outlet, NavLink } from "react-router-dom"
-import { 
+import { useEffect, useState } from "react"
+import {
   BarChart3, 
   Users, 
   Wrench, 
@@ -11,8 +12,12 @@ import {
   Shield
 } from "lucide-react"
 import { cn } from "../lib/utils"
+import MaintenanceBanner from "../components/MaintenanceBanner"
+import useSessionHeartbeat from "../hooks/useSessionHeartbeat"
 
 export default function ManagementLayout() {
+  useSessionHeartbeat("management")
+  const [lastUpdated, setLastUpdated] = useState(new Date())
   const navItems = [
     { path: "/management", icon: Home, label: "Overview" },
     { path: "/management/analytics", icon: BarChart3, label: "Analytics" },
@@ -22,6 +27,11 @@ export default function ManagementLayout() {
     { path: "/management/monitoring", icon: Activity, label: "Live Monitoring" },
     { path: "/management/settings", icon: Settings, label: "Settings" },
   ]
+
+  useEffect(() => {
+    const interval = setInterval(() => setLastUpdated(new Date()), 60_000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-950">
@@ -84,6 +94,7 @@ export default function ManagementLayout() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-0">
+        <MaintenanceBanner />
         {/* Header */}
         <header className="shrink-0 h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -91,7 +102,7 @@ export default function ManagementLayout() {
           </h2>
           <div className="flex items-center gap-4">
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              Last updated: Just now
+              Last updated: {lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </div>
           </div>
         </header>

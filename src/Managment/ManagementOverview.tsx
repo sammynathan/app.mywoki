@@ -23,6 +23,7 @@ interface Stats {
   activeTools: number
   recentActivations: number
   pendingNotifications: number
+  activeSessions: number
 }
 
 export default function ManagementOverview() {
@@ -33,7 +34,8 @@ export default function ManagementOverview() {
     totalTools: 0,
     activeTools: 0,
     recentActivations: 0,
-    pendingNotifications: 0
+    pendingNotifications: 0,
+    activeSessions: 0
   })
   const [loading, setLoading] = useState(true)
   const [recentActivities, setRecentActivities] = useState<any[]>([])
@@ -51,7 +53,8 @@ export default function ManagementOverview() {
         { count: totalTools },
         { count: activeTools },
         { count: recentActivations },
-        { count: pendingNotifications }
+        { count: pendingNotifications },
+        { count: activeSessions }
       ] = await Promise.all([
         supabase.from('users').select('*', { count: 'exact', head: true }),
         supabase.from('users').select('*', { count: 'exact', head: true }).eq('status', 'active'),
@@ -59,7 +62,11 @@ export default function ManagementOverview() {
         supabase.from('user_tool_activations').select('*', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('tool_events').select('*', { count: 'exact', head: true })
           .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
-        supabase.from('notifications').select('*', { count: 'exact', head: true }).eq('read', false)
+        supabase.from('notifications').select('*', { count: 'exact', head: true }).eq('read', false),
+        supabase
+          .from('user_sessions')
+          .select('*', { count: 'exact', head: true })
+          .gte('last_seen', new Date(Date.now() - 15 * 60 * 1000).toISOString())
       ])
 
       // Load recent activities
@@ -79,7 +86,8 @@ export default function ManagementOverview() {
         totalTools: totalTools || 0,
         activeTools: activeTools || 0,
         recentActivations: recentActivations || 0,
-        pendingNotifications: pendingNotifications || 0
+        pendingNotifications: pendingNotifications || 0,
+        activeSessions: activeSessions || 0
       })
       setRecentActivities(activities || [])
     } catch (error) {
@@ -185,10 +193,10 @@ export default function ManagementOverview() {
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Active Sessions</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">
-                {Math.floor(Math.random() * 50) + 10}
+                {stats.activeSessions}
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Current users
+                Last 15 minutes
               </p>
             </div>
             <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">

@@ -73,6 +73,7 @@ interface Tool {
   description: string
   long_description?: string
   category: string
+  issues?: string[]
   use_cases?: string[]
   who_its_for?: string[]
   features?: string[]
@@ -101,6 +102,7 @@ export default function ToolsManagement() {
     description: "",
     long_description: "",
     category: "",
+    issues: [] as string[],
     use_cases: [] as string[],
     who_its_for: [] as string[],
     features: [] as string[],
@@ -409,6 +411,7 @@ export default function ToolsManagement() {
         description: "",
         long_description: "",
         category: "",
+        issues: [],
         use_cases: [],
         who_its_for: [],
         features: [],
@@ -441,6 +444,49 @@ export default function ToolsManagement() {
     }
   }
 
+  const reportToolIssue = async (tool: Tool) => {
+    const issue = prompt(`Describe the issue for "${tool.name}"`)
+    if (!issue || !issue.trim()) return
+
+    const updatedIssues = [...(tool.issues || []), issue.trim()]
+
+    try {
+      await supabase
+        .from('tools')
+        .update({ issues: updatedIssues })
+        .eq('id', tool.id)
+
+      setTools((prev) =>
+        prev.map((item) => (item.id === tool.id ? { ...item, issues: updatedIssues } : item))
+      )
+      setFilteredTools((prev) =>
+        prev.map((item) => (item.id === tool.id ? { ...item, issues: updatedIssues } : item))
+      )
+    } catch (error) {
+      console.error('Error reporting tool issue:', error)
+    }
+  }
+
+  const resolveToolIssues = async (tool: Tool) => {
+    if (!confirm(`Clear all issues for "${tool.name}"?`)) return
+
+    try {
+      await supabase
+        .from('tools')
+        .update({ issues: [] })
+        .eq('id', tool.id)
+
+      setTools((prev) =>
+        prev.map((item) => (item.id === tool.id ? { ...item, issues: [] } : item))
+      )
+      setFilteredTools((prev) =>
+        prev.map((item) => (item.id === tool.id ? { ...item, issues: [] } : item))
+      )
+    } catch (error) {
+      console.error('Error resolving tool issues:', error)
+    }
+  }
+
   const deleteTool = async (toolId: string) => {
     if (!confirm('Are you sure you want to delete this tool? This action cannot be undone.')) {
       return
@@ -465,6 +511,7 @@ export default function ToolsManagement() {
       description: tool.description,
       long_description: tool.long_description || "",
       category: tool.category,
+      issues: tool.issues || [],
       use_cases: tool.use_cases || [],
       who_its_for: tool.who_its_for || [],
       features: tool.features || [],
@@ -543,6 +590,11 @@ export default function ToolsManagement() {
                       }`}>
                         {tool.is_active ? 'Active' : 'Inactive'}
                       </span>
+                      {tool.issues && tool.issues.length > 0 && (
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300">
+                          Issue
+                        </span>
+                      )}
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       {tool.category}
@@ -567,29 +619,52 @@ export default function ToolsManagement() {
                 <p className="text-sm text-gray-700 dark:text-gray-300">
                   {tool.description}
                 </p>
+                {tool.issues && tool.issues.length > 0 && (
+                  <div className="rounded-lg border border-rose-200 bg-rose-50/60 px-3 py-2 text-xs text-rose-800 dark:border-rose-900/40 dark:bg-rose-900/20 dark:text-rose-200">
+                    Issue: {tool.issues[0]}
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-800">
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <BarChart3 className="w-4 h-4" />
                     {tool.usage_count} active users
                   </div>
-                  <Button
-                    size="sm"
-                    variant={tool.is_active ? "outline" : "default"}
-                    onClick={() => toggleToolStatus(tool.id, tool.is_active)}
-                  >
-                    {tool.is_active ? (
-                      <>
-                        <XCircle className="w-4 h-4 mr-1" />
-                        Deactivate
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-4 h-4 mr-1" />
-                        Activate
-                      </>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => reportToolIssue(tool)}
+                    >
+                      Report issue
+                    </Button>
+                    {tool.issues && tool.issues.length > 0 && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => resolveToolIssues(tool)}
+                      >
+                        Resolve
+                      </Button>
                     )}
-                  </Button>
+                    <Button
+                      size="sm"
+                      variant={tool.is_active ? "outline" : "default"}
+                      onClick={() => toggleToolStatus(tool.id, tool.is_active)}
+                    >
+                      {tool.is_active ? (
+                        <>
+                          <XCircle className="w-4 h-4 mr-1" />
+                          Deactivate
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Activate
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Card>

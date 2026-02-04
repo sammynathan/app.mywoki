@@ -4,9 +4,13 @@ import Sidebar from "./Sidebar"
 import DashboardHeader from "./DashboardHeader"
 import ChatWidget from "../components/ChatWidget"
 import KeyboardShortcutsGuide from "../components/context/KeyboardShortcutsGuide"
+import MaintenanceBanner from "../components/MaintenanceBanner"
+import StatusBanner from "../components/StatusBanner"
+import useSessionHeartbeat from "../hooks/useSessionHeartbeat"
 
 export default function DashboardLayout() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  useSessionHeartbeat("dashboard")
 
   const handleMenuClick = () => {
     setShowMobileMenu(!showMobileMenu)
@@ -29,6 +33,8 @@ export default function DashboardLayout() {
 
       {/* Main column */}
       <div className="flex-1 flex flex-col min-h-0">
+        <StatusBanner />
+        <MaintenanceBanner />
         {/* Header - Fixed */}
         <header className="shrink-0 bg-[color:var(--dashboard-surface)] border-b border-[color:var(--dashboard-border)]">
           <DashboardHeader

@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import type { MouseEvent as ReactMouseEvent } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { Helmet } from "react-helmet-async"
 import {
   Sparkles,
   ArrowRight,
@@ -22,6 +24,10 @@ import {
 } from "lucide-react"
 import { plans } from "../lib/plans"
 import ChatWidget from "./ChatWidget"
+import { useAuth } from "../auth/AuthContext"
+import MyWokiLoader from "./MyWokiLoader"
+import MaintenanceBanner from "./MaintenanceBanner"
+import StatusBanner from "./StatusBanner"
 
 const products = [
   {
@@ -98,19 +104,12 @@ const products = [
   }
 ]
 
-const toolNamesFromCodebase = [
-  "Slack Integration",
-  "GitHub Automation",
-  "Google Sheets Sync",
-  "Email Campaigns",
-  "Stripe Payments",
-  "Zapier Connector",
-  "Jira Integration",
-  "Notion API"
-]
 
 export default function LandingPage() {
+  const navigate = useNavigate()
+  const { isAuthenticated, loading: authLoading } = useAuth()
   const [isProductsOpen, setIsProductsOpen] = useState(false)
+  const [isRedirecting, setIsRedirecting] = useState(false)
   const productsMenuRef = useRef<HTMLDivElement | null>(null)
   const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://mywoki.com"
   const landingUrl = `${siteUrl}/`
@@ -177,6 +176,9 @@ export default function LandingPage() {
     }
     return JSON.stringify(data)
   }, [siteUrl, landingUrl, pricingPlans])
+  const pageTitle = "MyWoki | Calm, founder-first toolkits to build smarter"
+  const pageDescription = "MyWoki helps founders and small teams turn ideas into real products with curated toolkits, playbooks, and clear next steps."
+  const canonicalUrl = landingUrl
   const handleProductSelect = (id: string) => {
     if (typeof document !== "undefined") {
       const target = document.getElementById(`product-${id}`)
@@ -203,12 +205,51 @@ export default function LandingPage() {
     }
   }, [isProductsOpen])
 
+  useEffect(() => {
+    if (!isRedirecting || authLoading) return
+
+    if (isAuthenticated) {
+      const timer = setTimeout(() => {
+        navigate("/dashboard")
+      }, 150)
+      return () => clearTimeout(timer)
+    }
+
+    setIsRedirecting(false)
+    navigate("/login")
+  }, [authLoading, isAuthenticated, isRedirecting, navigate])
+
+  const handleStartClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault()
+
+    if (authLoading || isAuthenticated) {
+      setIsRedirecting(true)
+      return
+    }
+
+    navigate("/login")
+  }
+
   return (
     <div id="top" className="min-h-screen bg-white text-gray-900">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+      </Helmet>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd }}
       />
+      <StatusBanner />
+      <MaintenanceBanner />
       {/* ================= HEADER ================= */}
       <header className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
@@ -301,6 +342,7 @@ export default function LandingPage() {
         </nav>
         <Link
           to="/login"
+          onClick={handleStartClick}
           className="text-sm font-semibold px-5 py-2 rounded-full bg-gray-900 text-white hover:bg-gray-800 transition shadow-sm hover:shadow"
         >
           Get started
@@ -322,7 +364,7 @@ export default function LandingPage() {
         <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6 tracking-tight">
           Turn ideas into products --
           <br />
-          <span className="text-emerald-600">without drowning in tools</span>
+          <span className="text-emerald-600">with only the tools that matter</span>
         </h1>
 
         <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
@@ -334,6 +376,7 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
             to="/login"
+            onClick={handleStartClick}
             className="px-7 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-200/60"
           >
             Start building
@@ -509,8 +552,7 @@ export default function LandingPage() {
               </h3>
 
               <p className="text-gray-600 leading-relaxed">
-                You will not see everything at once. Tools appear when they are
-                actually useful -- not before, not after.
+                Tools appear when they are actually useful — for example, validation tools before launch, payments only when you’re ready to sell.
               </p>
             </div>
 
@@ -550,11 +592,11 @@ export default function LandingPage() {
 <section className="bg-gray-50 py-24">
   <div className="max-w-5xl mx-auto px-6 text-center">
     <h2 className="text-3xl font-bold mb-6">
-      Built for people who want progress
+      This is not for people who want everything automated or AI-driven.
+It’s for founders who want clarity and control.
     </h2>
     <p className="text-gray-600 mb-10">
-      Whether you are testing an idea, running a small team, or building
-      quietly — mywoki gives you structure without pressure.
+      This is for people who want to build with intention, using only the tools that truly help them move forward.
     </p>
 
     <div className="grid sm:grid-cols-2 gap-6 mb-12">
@@ -597,216 +639,199 @@ export default function LandingPage() {
 </section>
 
       {/* ================= PRODUCTS ================= */}
-      <section id="products" className="py-24 bg-slate-950 text-slate-100">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-            <div>
-              <h2 className="text-3xl font-bold mb-3">Products built for traction</h2>
-              <p className="text-slate-300 max-w-2xl">
-                Each product is designed to remove one high-friction step in the founder journey.
-                Start with the featured toolkit, then add what you need as you grow.
+<section id="products" className="py-28 bg-slate-950 text-slate-100">
+  <div className="max-w-6xl mx-auto px-6">
+
+    {/* Section header */}
+    <div className="max-w-3xl mb-16">
+      <h2 className="text-4xl font-bold mb-4">
+        Start with clarity.
+      </h2>
+      <p className="text-slate-300 text-lg">
+        Mywoki is built as a progression. You don’t unlock everything at once.
+        You start where every serious founder should.
+      </p>
+    </div>
+
+    {/* FEATURED PRODUCT */}
+    <div
+      id="product-idea-validation"
+      className="relative rounded-3xl border border-emerald-500/40 bg-gradient-to-br from-emerald-500/15 to-emerald-900/10 p-10 mb-20 shadow-xl"
+    >
+      {/* Badge */}
+      <div className="absolute -top-4 left-8 px-4 py-1 rounded-full bg-emerald-600 text-white text-xs font-semibold shadow">
+        Start here
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-10 items-center">
+        {/* Copy */}
+        <div>
+          <h3 className="text-3xl font-semibold mb-4">
+            Business Idea Validation Toolkit
+          </h3>
+
+          <p className="text-slate-200 mb-6 text-lg leading-relaxed">
+            Before you build, spend money, or commit months — get a clear signal.
+            This toolkit helps you validate real demand using structured questions,
+            evidence, and decision checkpoints.
+          </p>
+
+          <ul className="space-y-3 text-slate-300 text-sm mb-8">
+            <li>• Identify the real problem you’re solving</li>
+            <li>• Test if people are already paying for alternatives</li>
+            <li>• Understand who your first customers actually are</li>
+            <li>• Decide confidently: proceed, pivot, or stop</li>
+          </ul>
+
+          <Link
+            to="/login"
+            onClick={handleStartClick}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition shadow"
+          >
+            Start validation
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* Visual / placeholder */}
+        <div className="rounded-2xl bg-slate-900/60 border border-slate-800 p-6 text-slate-300">
+          <p className="text-sm font-medium mb-2 text-emerald-300">
+            What you get
+          </p>
+          <p className="text-sm leading-relaxed">
+            A guided flow that turns uncertainty into a clear next step.
+            No AI guesses. No vanity metrics. Just structured thinking
+            and real-world signals.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* SECONDARY TOOLS */}
+    <div className="mb-10">
+      <h4 className="text-lg font-semibold mb-2">
+        Unlock more as you progress
+      </h4>
+      <p className="text-slate-400 text-sm max-w-xl">
+        Once you validate, Mywoki gradually introduces the right tools
+        for your next stage — not before.
+      </p>
+    </div>
+
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {products
+        .filter(p => !p.featured)
+        .map(product => {
+          const Icon = product.icon
+          return (
+            <div
+              key={product.id}
+              className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 text-slate-300"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <Icon className="w-4 h-4 text-emerald-400" />
+                <h5 className="font-medium text-slate-100 text-sm">
+                  {product.shortTitle}
+                </h5>
+              </div>
+              <p className="text-xs text-slate-400">
+                Available when it becomes relevant.
               </p>
             </div>
+          )
+        })}
+    </div>
+  </div>
+</section>
 
-            <details className="relative w-full md:w-80">
-              <summary className="list-none cursor-pointer px-5 py-3 border border-emerald-500/30 rounded-full text-sm font-medium text-emerald-100 flex items-center justify-between bg-slate-900/80 hover:bg-slate-900 transition">
-                Explore the suite
-                <ChevronDown className="w-4 h-4" />
-              </summary>
-              <div className="absolute z-10 mt-2 w-full rounded-2xl border border-slate-800 bg-slate-900 shadow-xl p-2">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                  {products.map((product) => {
-                    const Icon = product.icon
-                    return (
-                      <button
-                        key={product.id}
-                        type="button"
-                        onClick={() => handleProductSelect(product.id)}
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg text-sm text-slate-200 hover:text-emerald-200 hover:bg-emerald-500/10 transition"
-                      >
-                        <Icon className="w-4 h-4 text-emerald-300" />
-                        {product.shortTitle}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            </details>
+     {/* ================= PRICING ================= */}
+<section id="pricing" className="bg-gray-50 py-24">
+  <div className="max-w-6xl mx-auto px-6">
+    <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+      <div>
+        <h2 className="text-3xl font-bold mb-3">
+          Transparent pricing for every stage
+        </h2>
+        <p className="text-gray-600 max-w-2xl">
+          Tools are priced by plan. Start with Starter, then scale into Core or Growth
+          when you need more activations and support.
+        </p>
+      </div>
+
+      
+    </div>
+
+    {/* Philosophical pricing framing */}
+    <div className="max-w-3xl mx-auto mb-16">
+      <div className="rounded-2xl border border-emerald-100 bg-white p-8 text-center shadow-sm">
+        <p className="text-xl font-semibold text-gray-900 mb-2">
+          You’re not paying for software.
+        </p>
+        <p className="text-gray-700">
+          You’re paying for clarity, timing, and fewer wrong decisions —
+          so you can move forward without second-guessing every step.
+        </p>
+      </div>
+    </div>
+
+    {/* Plans */}
+    <div className="grid md:grid-cols-3 gap-8">
+      {pricingPlans.map((plan) => (
+        <div
+          key={plan.name}
+          className={`rounded-2xl border p-7 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
+            plan.recommended ? "border-emerald-500 shadow-emerald-100" : ""
+          }`}
+        >
+          {plan.recommended && (
+            <span className="inline-flex text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 mb-4">
+              Recommended
+            </span>
+          )}
+
+          <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
+          <p className="text-gray-600 mb-4">{plan.note}</p>
+
+          <div className="text-3xl font-bold mb-2">
+            {plan.price === 0 ? "Free" : `$${plan.price}`}
+            <span className="text-base font-medium text-gray-500">/month</span>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {[
-              {
-                title: "Validate with clarity",
-                copy: "Turn uncertainty into a clear next step.",
-                icon: <Compass className="w-5 h-5 text-emerald-600" />
-              },
-              {
-                title: "Launch with calm",
-                copy: "Move fast without chaos or tool sprawl.",
-                icon: <Leaf className="w-5 h-5 text-emerald-600" />
-              },
-              {
-                title: "Grow with focus",
-                copy: "Stack what matters, skip the noise.",
-                icon: <Star className="w-5 h-5 text-emerald-600" />
-              }
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-sm backdrop-blur transition hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
-                  {item.icon}
-                </div>
-                <h3 className="text-base font-semibold text-slate-100 mb-1">{item.title}</h3>
-                <p className="text-sm text-slate-300">{item.copy}</p>
-              </div>
+          {plan.yearly && (
+            <p className="text-sm text-gray-500 mb-4">
+              or ${plan.yearly}/year
+            </p>
+          )}
+
+          <ul className="text-sm text-gray-600 space-y-2 mb-6">
+            {plan.features.map((feature) => (
+              <li key={feature}>– {feature}</li>
             ))}
-          </div>
+          </ul>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {products.map((product) => {
-              const isFeatured = product.featured
-              const Icon = product.icon
+          <Link
+            to="/login"
+            onClick={handleStartClick}
+            className={`inline-flex items-center justify-center w-full px-4 py-2 rounded-full font-semibold transition ${
+              plan.recommended
+                ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md shadow-emerald-200/60"
+                : "border border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+            }`}
+          >
+            Choose {plan.name}
+          </Link>
 
-              return (
-                <div
-                  key={product.id}
-                  id={`product-${product.id}`}
-                  className={`border rounded-2xl p-6 shadow-sm transition hover:shadow-md ${
-                    isFeatured
-                      ? "border-emerald-500/40 bg-emerald-500/10"
-                      : "border-slate-800 bg-slate-900/70"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3">
-                      <span className="mt-1 flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-200 border border-emerald-500/20">
-                        <Icon className="w-4 h-4" />
-                      </span>
-                      <div>
-                        <h3 className="text-lg font-semibold text-slate-100">
-                          {product.shortTitle}
-                        </h3>
-                        <p className="text-sm text-slate-300 mt-1">
-                          {product.summary}
-                        </p>
-                      </div>
-                    </div>
-                    {isFeatured && (
-                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200">
-                        Featured
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-
-          <div className="mt-12 border border-slate-800 rounded-2xl p-6 bg-slate-900/70">
-            <h3 className="text-lg font-semibold mb-3 text-slate-100">Tools we integrate</h3>
-            <div className="flex flex-wrap gap-2">
-              {toolNamesFromCodebase.map((tool) => (
-                <span
-                  key={tool}
-                  className="text-xs px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-200"
-                >
-                  {tool}
-                </span>
-              ))}
-            </div>
-          </div>
+          <a
+            href="/help"
+            className="mt-3 inline-flex items-center justify-center w-full px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition"
+          >
+            Contact sales
+          </a>
         </div>
-      </section>
-
-      {/* ================= PRICING ================= */}
-      <section id="pricing" className="bg-gray-50 py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-            <div>
-              <h2 className="text-3xl font-bold mb-3">Transparent pricing for every stage</h2>
-              <p className="text-gray-600 max-w-2xl">
-                Tools are priced by plan. Start with Starter, then scale into Core or Growth when
-                you need more activations and support.
-              </p>
-            </div>
-
-            <details className="relative w-full md:w-80">
-              <summary className="list-none cursor-pointer px-5 py-3 border border-emerald-100 rounded-full text-sm font-medium text-emerald-700 flex items-center justify-between bg-emerald-50 hover:bg-emerald-100 transition">
-                Jump to a product
-                <ChevronDown className="w-4 h-4" />
-              </summary>
-              <div className="absolute z-10 mt-2 w-full rounded-2xl border border-emerald-100 bg-white shadow-xl p-2">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                  {products.map((product) => {
-                    const Icon = product.icon
-                    return (
-                      <button
-                        key={product.id}
-                        type="button"
-                        onClick={() => handleProductSelect(product.id)}
-                        className="flex items-center gap-2 w-full text-left px-4 py-2 rounded-lg text-sm text-gray-700 hover:text-emerald-700 hover:bg-emerald-50 transition"
-                      >
-                        <Icon className="w-4 h-4 text-emerald-600" />
-                        {product.shortTitle}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            </details>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`rounded-2xl border p-7 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg ${
-                  plan.recommended ? "border-emerald-500 shadow-emerald-100" : ""
-                }`}
-              >
-                {plan.recommended && (
-                  <span className="inline-flex text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 mb-4">
-                    Recommended
-                  </span>
-                )}
-                <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                <p className="text-gray-600 mb-4">{plan.note}</p>
-                <div className="text-3xl font-bold mb-2">
-                  {plan.price === 0 ? "Free" : `$${plan.price}`}
-                  <span className="text-base font-medium text-gray-500">/month</span>
-                </div>
-                {plan.yearly && (
-                  <p className="text-sm text-gray-500 mb-4">or ${plan.yearly}/year</p>
-                )}
-                <ul className="text-sm text-gray-600 space-y-2 mb-6">
-                  {plan.features.map((feature) => (
-                    <li key={feature}>- {feature}</li>
-                  ))}
-                </ul>
-                <Link
-                  to="/login"
-                  className={`inline-flex items-center justify-center w-full px-4 py-2 rounded-full font-semibold transition ${
-                    plan.recommended
-                      ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md shadow-emerald-200/60"
-                      : "border border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                  }`}
-                >
-                  Choose {plan.name}
-                </Link>
-                <a
-                  href="/help"
-                  className="mt-3 inline-flex items-center justify-center w-full px-4 py-2 rounded-full border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition"
-                >
-                  Contact sales
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ================= ABOUT ================= */}
       <section id="about" className="py-24 bg-slate-950 text-slate-100">
@@ -840,6 +865,7 @@ export default function LandingPage() {
             <div className="mt-6">
               <Link
                 to="/login"
+                onClick={handleStartClick}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition shadow-sm hover:shadow"
               >
                 Start with the featured toolkit
@@ -878,7 +904,7 @@ export default function LandingPage() {
 
         <div className="relative max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-6">
-            Ready to build without the noise?
+            Ready to validate and launch — calmly?
           </h2>
           <p className="text-gray-700 mb-10 max-w-2xl mx-auto">
             Join thousands who have found a calmer way to work with software
@@ -886,6 +912,7 @@ export default function LandingPage() {
 
           <Link
             to="/login"
+            onClick={handleStartClick}
             className="inline-flex items-center gap-2 px-10 py-5 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold text-lg hover:from-emerald-700 hover:to-emerald-600 transition shadow-xl hover:shadow-2xl"
           >
             Start with clarity
@@ -940,6 +967,7 @@ export default function LandingPage() {
           <div className="flex justify-between items-center text-sm text-gray-500 mb-6">
             <span>Copyright {new Date().getFullYear()} mywoki</span>
             <div className="flex gap-4">
+              <a href="/status" target="_blank" rel="noopener noreferrer">Status</a>
               <a href="/help" target="_blank" rel="noopener noreferrer">Help</a>
               <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy</a>
               <a href="/terms" target="_blank" rel="noopener noreferrer">Terms</a>
@@ -996,6 +1024,16 @@ export default function LandingPage() {
           Back to top
         </a>
       </div>
+      {isRedirecting && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm dark:bg-slate-950/80">
+          <div className="flex flex-col items-center gap-3">
+            <MyWokiLoader />
+            <p className="text-sm text-gray-700 dark:text-slate-200">
+              Taking you to your dashboard...
+            </p>
+          </div>
+        </div>
+      )}
       <ChatWidget />
     </div>
   )

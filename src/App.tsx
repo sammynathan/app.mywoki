@@ -13,6 +13,8 @@ import CookiePolicy from "./components/cookie-policy"
 import SearchServiceDocs from "./components/SearchServiceDocs"
 import DocPage from "./components/DocPage"
 import ManagementRoute from "./components/ManagementRoute"
+import MaintenanceGate from "./components/MaintenanceGate"
+import StatusPage from "./components/StatusPage"
 
 // Dashboard pages
 import DashboardOverview from "./dashboard/DashboardOverview"
@@ -38,6 +40,7 @@ function App() {
     <AuthProvider>
       <SearchProvider>
       <Router>
+        <MaintenanceGate>
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
@@ -49,6 +52,7 @@ function App() {
           <Route path="/cookies" element={<CookiePolicy />} />
           <Route path="/doc/search-service" element={<SearchServiceDocs />} />
           <Route path="/doc/:id" element={<DocPage />} />
+          <Route path="/status" element={<StatusPage />} />
 
           {/* Protected dashboard routes */}
           <Route
@@ -91,6 +95,7 @@ function App() {
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </MaintenanceGate>
       </Router>
       </SearchProvider>
     </AuthProvider>

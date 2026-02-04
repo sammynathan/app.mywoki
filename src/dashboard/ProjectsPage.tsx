@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { supabase } from "../lib/supabase"
 import { Card } from "../components/ui/card"
@@ -11,12 +11,20 @@ import MyWokiLoader from "../components/MyWokiLoader"
 export default function ProjectPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [project, setProject] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     loadProject()
   }, [id])
+
+  useEffect(() => {
+    if (loading || !location.hash) return
+    const targetId = location.hash.replace("#", "")
+    const element = document.getElementById(targetId)
+    element?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }, [loading, location.hash])
 
   async function loadProject() {
     const { data } = await supabase
@@ -156,7 +164,9 @@ export default function ProjectPage() {
       </Card>
 
       {/* Project notes */}
-      <ProjectNotesPanel activationId={project.id} />
+      <section id="project-notes" className="scroll-mt-24">
+        <ProjectNotesPanel activationId={project.id} />
+      </section>
 
       {/* Recent activity (placeholder) */}
       <Card className="p-6 bg-[color:var(--dashboard-surface)]">

@@ -140,7 +140,7 @@ export default function AnalyticsManagement() {
 
       const toolMap = new Map()
       topToolsData?.forEach(activation => {
-        const toolName = activation.tools?.[0]?.name || 'Unknown'
+        const toolName = activation.tools?.name || 'Unknown'
         const current = toolMap.get(toolName) || 0
         toolMap.set(toolName, current + 1)
       })

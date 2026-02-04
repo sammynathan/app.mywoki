@@ -5,6 +5,8 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useAuth } from "../auth/AuthContext"
 import { verificationService } from "../auth/services/verification"
 import HelpModal from "./HelpModal"
+import MaintenanceBanner from "./MaintenanceBanner"
+import StatusBanner from "./StatusBanner"
 
 const Spinner = () => (
   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -473,6 +475,8 @@ export default function LoginPage() {
           {showNotification}
         </div>
       )}
+      <StatusBanner />
+      <MaintenanceBanner />
 
       <header className="py-4 px-6">
         <Link to="/" className="flex items-center gap-3">

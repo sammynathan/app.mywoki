@@ -5,6 +5,7 @@ import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Switch } from "../components/ui/switch"
 import { Label } from "../components/ui/label"
+import { supabase } from "../lib/supabase"
 import { 
   Settings,
   Shield,
@@ -15,29 +16,31 @@ import {
   RefreshCw
 } from "lucide-react"
 
+const defaultSettings = {
+  // General
+  siteName: "mywoki",
+  siteDescription: "Workspace Management Platform",
+  maintenanceMode: false,
+
+  // Notifications
+  sendWelcomeEmail: true,
+  sendToolActivationEmail: true,
+  sendWeeklyDigest: true,
+
+  // Security
+  requireEmailVerification: true,
+  enableTwoFactor: false,
+  sessionTimeout: 24,
+
+  // Performance
+  cacheEnabled: true,
+  realtimeUpdates: true,
+  autoBackup: true,
+  backupFrequency: "daily"
+}
+
 export default function ManagementSettings() {
-  const [settings, setSettings] = useState({
-    // General
-    siteName: "mywoki",
-    siteDescription: "Workspace Management Platform",
-    maintenanceMode: false,
-    
-    // Notifications
-    sendWelcomeEmail: true,
-    sendToolActivationEmail: true,
-    sendWeeklyDigest: true,
-    
-    // Security
-    requireEmailVerification: true,
-    enableTwoFactor: false,
-    sessionTimeout: 24,
-    
-    // Performance
-    cacheEnabled: true,
-    realtimeUpdates: true,
-    autoBackup: true,
-    backupFrequency: "daily"
-  })
+  const [settings, setSettings] = useState(defaultSettings)
 
   const [loading, setLoading] = useState(false)
   const [saveStatus, setSaveStatus] = useState<{
@@ -46,21 +49,77 @@ export default function ManagementSettings() {
   }>({ type: null, message: '' })
 
   useEffect(() => {
-    // Load settings from localStorage or API
-    const savedSettings = localStorage.getItem('management_settings')
-    if (savedSettings) {
-      setSettings(JSON.parse(savedSettings))
-    }
+    loadSettings()
   }, [])
+
+  const loadSettings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('management_settings')
+        .select('*')
+        .eq('scope', 'global')
+        .maybeSingle()
+
+      if (error) {
+        console.error('Error loading management settings:', error)
+        return
+      }
+
+      if (!data) {
+        setSettings(defaultSettings)
+        return
+      }
+
+      setSettings({
+        siteName: data.site_name ?? defaultSettings.siteName,
+        siteDescription: data.site_description ?? defaultSettings.siteDescription,
+        maintenanceMode: data.maintenance_mode ?? defaultSettings.maintenanceMode,
+        sendWelcomeEmail: data.send_welcome_email ?? defaultSettings.sendWelcomeEmail,
+        sendToolActivationEmail: data.send_tool_activation_email ?? defaultSettings.sendToolActivationEmail,
+        sendWeeklyDigest: data.send_weekly_digest ?? defaultSettings.sendWeeklyDigest,
+        requireEmailVerification: data.require_email_verification ?? defaultSettings.requireEmailVerification,
+        enableTwoFactor: data.enable_two_factor ?? defaultSettings.enableTwoFactor,
+        sessionTimeout: data.session_timeout ?? defaultSettings.sessionTimeout,
+        cacheEnabled: data.cache_enabled ?? defaultSettings.cacheEnabled,
+        realtimeUpdates: data.realtime_updates ?? defaultSettings.realtimeUpdates,
+        autoBackup: data.auto_backup ?? defaultSettings.autoBackup,
+        backupFrequency: data.backup_frequency ?? defaultSettings.backupFrequency
+      })
+    } catch (error) {
+      console.error('Error loading management settings:', error)
+    }
+  }
 
   const saveSettings = async () => {
     setLoading(true)
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Save to localStorage (in real app, save to backend)
-      localStorage.setItem('management_settings', JSON.stringify(settings))
+      const { error } = await supabase
+        .from('management_settings')
+        .upsert({
+          scope: 'global',
+          site_name: settings.siteName,
+          site_description: settings.siteDescription,
+          maintenance_mode: settings.maintenanceMode,
+          send_welcome_email: settings.sendWelcomeEmail,
+          send_tool_activation_email: settings.sendToolActivationEmail,
+          send_weekly_digest: settings.sendWeeklyDigest,
+          require_email_verification: settings.requireEmailVerification,
+          enable_two_factor: settings.enableTwoFactor,
+          session_timeout: settings.sessionTimeout,
+          cache_enabled: settings.cacheEnabled,
+          realtime_updates: settings.realtimeUpdates,
+          auto_backup: settings.autoBackup,
+          backup_frequency: settings.backupFrequency,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'scope' })
+
+      if (error) throw error
+
+      window.dispatchEvent(
+        new CustomEvent('managementSettingsUpdated', {
+          detail: { maintenanceMode: settings.maintenanceMode }
+        })
+      )
       
       setSaveStatus({
         type: 'success',
@@ -80,19 +139,7 @@ export default function ManagementSettings() {
   const resetToDefaults = () => {
     if (confirm('Are you sure you want to reset all settings to defaults?')) {
       setSettings({
-        siteName: "mywoki",
-        siteDescription: "Workspace Management Platform",
-        maintenanceMode: false,
-        sendWelcomeEmail: true,
-        sendToolActivationEmail: true,
-        sendWeeklyDigest: true,
-        requireEmailVerification: true,
-        enableTwoFactor: false,
-        sessionTimeout: 24,
-        cacheEnabled: true,
-        realtimeUpdates: true,
-        autoBackup: true,
-        backupFrequency: "daily"
+        ...defaultSettings
       })
     }
   }
