@@ -578,7 +578,7 @@ export default function LoginPage() {
                     onChange={(e) => handleOtpChange(e.target.value, i)}
                     onKeyDown={(e) => handleOtpKeyDown(e, i)}
                     onPaste={handleOtpPaste}
-                    className="w-12 h-14 rounded-lg text-black border border-gray-300 text-center text-xl font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm"
+                    className="w-12 h-14 rounded-lg text-white border border-gray-300 text-center text-xl font-semibold focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all shadow-sm white"
                     disabled={isVerifying}
                     aria-label={`Digit ${i + 1} of 6`}
                   />

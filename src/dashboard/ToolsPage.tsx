@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Card } from '../components/ui/card';
@@ -23,6 +23,33 @@ export default function ToolsPage() {
   const [tools, setTools] = useState<Tool[]>([]);
   const [userData, setUserData] = useState<UserData>({ plan: 'starter', activeTools: [] });
   const [loading, setLoading] = useState(true);
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://mywoki.com";
+  const toolsUrl = `${siteUrl}/dashboard/tools`;
+  const toolsJsonLd = useMemo(() => {
+    const data = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": `${toolsUrl}#webpage`,
+          "name": "Mywoki Tools",
+          "url": toolsUrl
+        },
+        {
+          "@type": "ItemList",
+          "name": "Mywoki Tools Catalog",
+          "itemListElement": tools.map((tool, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": tool.name,
+            "description": tool.description,
+            "url": `${siteUrl}/dashboard/tools/${tool.id}`
+          }))
+        }
+      ]
+    };
+    return JSON.stringify(data);
+  }, [siteUrl, toolsUrl, tools]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -95,6 +122,10 @@ export default function ToolsPage() {
 
   return (
     <div className="space-y-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: toolsJsonLd }}
+      />
       <header className="space-y-2">
         <h1 className="text-3xl font-semibold text-[color:var(--dashboard-text)]">
           Tools

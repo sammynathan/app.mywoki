@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import {
   Sparkles,
@@ -112,11 +112,71 @@ const toolNamesFromCodebase = [
 export default function LandingPage() {
   const [isProductsOpen, setIsProductsOpen] = useState(false)
   const productsMenuRef = useRef<HTMLDivElement | null>(null)
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://mywoki.com"
+  const landingUrl = `${siteUrl}/`
   const pricingPlans = [
     { id: "starter", ...plans.starter },
     { id: "core", ...plans.core },
     { id: "growth", ...plans.growth }
   ]
+  const jsonLd = useMemo(() => {
+    const offers = pricingPlans.map((plan) => ({
+      "@type": "Offer",
+      "name": `${plan.name} Plan`,
+      "price": plan.price,
+      "priceCurrency": "USD",
+      "url": `${siteUrl}/#pricing`
+    }))
+
+    const data = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": `${siteUrl}/#organization`,
+          "name": "Mywoki",
+          "alternateName": "Mywoki Marketplace",
+          "url": siteUrl,
+          "description": "Mywoki helps founders and teams turn physical and digital product ideas into reality with curated tools, playbooks, and guidance."
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${siteUrl}/#website`,
+          "name": "Mywoki",
+          "alternateName": "Mywoki Marketplace",
+          "url": siteUrl
+        },
+        {
+          "@type": "WebPage",
+          "@id": `${landingUrl}#webpage`,
+          "name": "Mywoki",
+          "url": landingUrl,
+          "isPartOf": { "@id": `${siteUrl}/#website` },
+          "about": { "@id": `${siteUrl}/#organization` }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Mywoki",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "url": siteUrl,
+          "offers": offers
+        },
+        {
+          "@type": "ItemList",
+          "name": "Mywoki toolkits",
+          "itemListElement": products.map((product, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": product.shortTitle,
+            "description": product.summary,
+            "url": `${siteUrl}/#product-${product.id}`
+          }))
+        }
+      ]
+    }
+    return JSON.stringify(data)
+  }, [siteUrl, landingUrl, pricingPlans])
   const handleProductSelect = (id: string) => {
     if (typeof document !== "undefined") {
       const target = document.getElementById(`product-${id}`)
@@ -145,6 +205,10 @@ export default function LandingPage() {
 
   return (
     <div id="top" className="min-h-screen bg-white text-gray-900">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       {/* ================= HEADER ================= */}
       <header className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
@@ -265,10 +329,7 @@ export default function LandingPage() {
           mywoki helps individuals and small teams get real value from software --
           without setup, overwhelm, or wasted time.
         </p>
-        <div className="max-w-3xl mx-auto mb-10 rounded-2xl border border-emerald-100 bg-emerald-50/70 px-5 py-4 text-sm text-emerald-900">
-          Building a physical product or a digital product? mywoki helps you find the right tools,
-          where to get your first users, and the exact next steps to validate and launch.
-        </div>
+        
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
@@ -486,33 +547,54 @@ export default function LandingPage() {
       </section>
 
       {/* ================= WHO IT'S FOR ================= */}
-      <section className="bg-gray-50 py-24">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-6">
-            Built for people who want progress
-          </h2>
-          <p className="text-gray-600 mb-10">
-            Whether you are testing an idea, running a small team, or building
-            quietly -- mywoki gives you structure without pressure.
-          </p>
+<section className="bg-gray-50 py-24">
+  <div className="max-w-5xl mx-auto px-6 text-center">
+    <h2 className="text-3xl font-bold mb-6">
+      Built for people who want progress
+    </h2>
+    <p className="text-gray-600 mb-10">
+      Whether you are testing an idea, running a small team, or building
+      quietly — mywoki gives you structure without pressure.
+    </p>
 
-          <div className="grid sm:grid-cols-2 gap-6">
-            {[
-              "Solo founders",
-              "Creators & builders",
-              "Early-stage teams",
-              "Anyone tired of tool overload"
-            ].map(role => (
-              <div
-                key={role}
-                className="bg-white border border-gray-200 rounded-xl p-6 font-medium shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-              >
-                {role}
-              </div>
-            ))}
+    <div className="grid sm:grid-cols-2 gap-6 mb-12">
+      {[
+        "Solo founders",
+        "Creators & builders",
+        "Early-stage teams",
+        "Anyone tired of tool overload"
+      ].map(role => (
+        <div
+          key={role}
+          className="bg-white border border-gray-200 rounded-xl p-6 font-medium shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+        >
+          {role}
+        </div>
+      ))}
+    </div>
+    
+    {/* Updated section with better styling to match and stand out */}
+    <div className="max-w-3xl mx-auto">
+      <div className="bg-gradient-to-r from-emerald-200 to-cyan-100 border border-emerald-200 rounded-2xl p-8 shadow-lg">
+        <div className="flex items-start justify-center gap-4">
+          <div className="hidden sm:flex items-center justify-center h-12 w-12 rounded-full bg-black text-white text-xl font-bold">
+            ✓
+          </div>
+          <div className="text-left">
+            <h3 className="text-xl font-bold text-black mb-2">
+              From idea to launch — in one place
+            </h3>
+            <p className="text-emerald-900">
+              Whether you're building a <span className="font-semibold">physical product</span> or a <span className="font-semibold">digital product</span>, 
+              mywoki helps you find the right tools, connect with your first users, 
+              and follow the exact next steps to validate and launch.
+            </p>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* ================= PRODUCTS ================= */}
       <section id="products" className="py-24 bg-slate-950 text-slate-100">

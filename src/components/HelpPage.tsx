@@ -1,5 +1,5 @@
 // HelpPage.tsx
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   HelpCircle, Search, Zap, Shield, Lock,
@@ -12,6 +12,78 @@ import { Card } from './ui/card'
 export default function HelpPage() {
   const [lastUpdated] = useState('January 19, 2026')
   const [searchQuery, setSearchQuery] = useState('')
+  const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://mywoki.com"
+  const helpUrl = `${siteUrl}/help`
+  const faqEntries = [
+    {
+      question: "Can I use multiple tools at once?",
+      answer: "Yes! You can activate and use as many tools as you like depending on your subscription plan."
+    },
+    {
+      question: "What happens to my data if I deactivate a tool?",
+      answer: "Your data is safely stored. You can export it before deactivating and reactivate the tool anytime to access it again."
+    },
+    {
+      question: "Is there a free trial?",
+      answer: "Check our pricing page for current trial offers. Some tools may have trial periods available."
+    },
+    {
+      question: "Can I change my email address?",
+      answer: "Yes, update your email in Account Settings. You'll need to verify the new email address."
+    },
+    {
+      question: "How often are new tools added?",
+      answer: "We regularly add new tools and features. Check the Tools page or follow our updates for announcements."
+    },
+    {
+      question: "What if I need help with a specific tool?",
+      answer: "Contact our support team through live chat or email, and we'll assist you with any tool-specific questions."
+    }
+  ]
+
+  const jsonLd = useMemo(() => {
+    const data = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": `${siteUrl}/#organization`,
+          "name": "Mywoki",
+          "alternateName": "Mywoki Marketplace",
+          "url": siteUrl,
+          "description": "Mywoki helps founders and teams turn physical and digital product ideas into reality with curated tools, playbooks, and guidance."
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${siteUrl}/#website`,
+          "name": "Mywoki",
+          "alternateName": "Mywoki Marketplace",
+          "url": siteUrl
+        },
+        {
+          "@type": "WebPage",
+          "@id": `${helpUrl}#webpage`,
+          "name": "Mywoki Help Center",
+          "url": helpUrl,
+          "isPartOf": { "@id": `${siteUrl}/#website` },
+          "about": { "@id": `${siteUrl}/#organization` }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": `${helpUrl}#faq`,
+          "mainEntity": faqEntries.map((entry) => ({
+            "@type": "Question",
+            "name": entry.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": entry.answer
+            }
+          }))
+        }
+      ]
+    }
+    return JSON.stringify(data)
+  }, [siteUrl, helpUrl])
 
   const sections = [
     { id: 'getting-started', title: '1. Getting Started' },
@@ -34,6 +106,10 @@ export default function HelpPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-emerald-50/40">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -44,10 +120,10 @@ export default function HelpPage() {
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Help Center
+            Mywoki Help Center
           </h1>
           <p className="text-xl opacity-90 max-w-3xl mb-8">
-            Find answers to common questions and get support with Mywoki Marketplace.
+            Find answers to common questions and get support with Mywoki and the Mywoki Marketplace platform.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <div className="flex items-center gap-2">
